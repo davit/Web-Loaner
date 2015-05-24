@@ -1,0 +1,247 @@
+<?php
+
+/**
+ * Implements hook_menu
+ */
+function physical_entity_create_menu()
+{
+    $items['physical-entity/create'] = array(
+        'title' => 'Create A Physical Entity',
+        'page callback' => 'physical_entity_create_page',
+        'access callback' => TRUE,
+    );
+
+    $items['physical-entity/get-by-personal-id'] = array(
+        'page callback' => 'physical_entity_create_get_physical_entity_by_personal_id',
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+
+function physical_entity_create_page()
+{
+    return drupal_get_form('physical_entity_create_form');
+}
+
+/**
+ * @Implements the hook_form()
+ *
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function physical_entity_create_form($form, &$form_state)
+{
+
+    $form["first_name"] = array(
+        "#type" => "textfield",
+        '#title' => t('First Name'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["last_name"] = array(
+        "#type" => "textfield",
+        '#title' => t('Last Name'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["last_name"] = array(
+        "#type" => "textfield",
+        '#title' => t('Last Name'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["address"] = array(
+        "#type" => "textfield",
+        '#title' => t('Address'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["personal_id_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Personal ID Number'),
+        '#required' => TRUE,
+        '#maxlength' => 11,
+        "#default" => '',
+    );
+
+    $form["home_phone"] = array(
+        "#type" => "textfield",
+        '#title' => t('Home Phone'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+
+    $form["home_phone"] = array(
+        "#type" => "textfield",
+        '#title' => t('Home Phone'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+
+    $form["mobile_phone_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Mobile Phone'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["email"] = array(
+        "#type" => "textfield",
+        '#title' => t('Email'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["main_income"] = array(
+        "#type" => "textfield",
+        '#title' => t('Main Income'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["secondary_income"] = array(
+        "#type" => "textfield",
+        '#title' => t('Secondary Income'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+    return $form;
+}
+
+
+/**
+ * Implements hook_form_validate()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function physical_entity_create_form_validate($form, &$form_state)
+{
+    $personal_id_number = $form_state['values']['personal_id_number'];
+    $physical_entity_with_personal_id_number = physical_entity_create_get_physical_entity_by_personal_id($personal_id_number);
+
+    if (!empty($physical_entity_with_personal_id_number)) {
+        form_set_error('', t("This person already exists"));
+    }
+
+    if (preg_match('/[\'^£$%&*()}{@#~`?><>,|=_+¬-]|[0-9]/', $form_state['values']['first_name'])) {
+        form_set_error('first_name', t("First name can only contain letters"));
+    }
+
+    if (preg_match('/[\'^£$%&*()}{@#~`?><>,|=_+¬-]|[0-9]/', $form_state['values']['last_name'])) {
+        form_set_error('last_name', t("Last name can only contain letters"));
+    }
+
+    if (!is_numeric($personal_id_number) | strlen($personal_id_number) != 11) {
+        form_set_error('personal_id_number', t("Personal ID Number can only contain 11 digits"));
+    }
+
+    if (!valid_email_address($form_state['values']['email'])) {
+        form_set_error('email', t("Invalid email address"));
+    }
+
+}
+
+
+/**
+ * Implements hook_form_submit()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function physical_entity_create_form_submit($form, &$form_state)
+{
+
+    $node = new stdClass();
+    $node->type = 'physical_entity';
+    $node->title = $form_state['values']['first_name'] . ' ' . $form_state['values']['last_name'];
+    node_object_prepare($node);
+
+    $node->language = LANGUAGE_NONE;
+
+    $node->field_first_name[$node->language] = array(
+        0 => array('value' => $form_state['values']['first_name'])
+    );
+
+    $node->field_last_name[$node->language] = array(
+        0 => array('value' => $form_state['values']['last_name'])
+    );
+
+    $node->field_address[$node->language] = array(
+        0 => array('value' => $form_state['values']['address'])
+    );
+
+    $node->field_address[$node->language] = array(
+        0 => array('value' => $form_state['values']['address'])
+    );
+
+    $node->field_personal_id_number[$node->language] = array(
+        0 => array('value' => $form_state['values']['personal_id_number'])
+    );
+
+    $node->field_home_phone[$node->language] = array(
+        0 => array('value' => $form_state['values']['home_phone'])
+    );
+
+    $node->field_mobile_phone_number[$node->language] = array(
+        0 => array('value' => $form_state['values']['mobile_phone_number'])
+    );
+
+    $node->field_email[$node->language] = array(
+        0 => array('value' => $form_state['values']['email'])
+    );
+
+    $node->field_main_income[$node->language] = array(
+        0 => array('value' => $form_state['values']['main_income'])
+    );
+
+    $node->field_secondary_income[$node->language] = array(
+        0 => array('value' => $form_state['values']['secondary_income'])
+    );
+
+    $node = node_submit($node);
+    node_save($node);
+
+    drupal_set_message("Physical Entity succesfully saved!");
+}
+
+/**
+ * Get Physical Entity by its Personal ID Number
+ *
+ * @param $personal_id_number
+ * @internal param $personal_id
+ * @return array|bool|mixed
+ */
+function physical_entity_create_get_physical_entity_by_personal_id($personal_id_number)
+{
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity')
+        ->fieldCondition('field_personal_id_number', 'value', $personal_id_number, '=');
+
+    $result = $query->execute();
+
+    $physical_entity = array();
+
+    if (isset($result['node'])) {
+        $physical_entity_ids = array_keys($result['node']);
+        $physical_entity = node_load($physical_entity_ids[0]);
+    }
+
+    return $physical_entity;
+}
