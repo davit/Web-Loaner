@@ -77,16 +77,7 @@ function physical_entity_create_form($form, &$form_state)
         "#default" => '',
     );
 
-
-    $form["home_phone"] = array(
-        "#type" => "textfield",
-        '#title' => t('Home Phone'),
-        '#required' => TRUE,
-        "#default" => '',
-    );
-
-
-    $form["mobile_phone_number"] = array(
+    $form["mobile_phone"] = array(
         "#type" => "textfield",
         '#title' => t('Mobile Phone'),
         '#required' => TRUE,
@@ -165,7 +156,6 @@ function physical_entity_create_form_validate($form, &$form_state)
  */
 function physical_entity_create_form_submit($form, &$form_state)
 {
-
     $node = new stdClass();
     $node->type = 'physical_entity';
     $node->title = $form_state['values']['first_name'] . ' ' . $form_state['values']['last_name'];
@@ -216,7 +206,7 @@ function physical_entity_create_form_submit($form, &$form_state)
     $node = node_submit($node);
     node_save($node);
 
-    drupal_set_message("Physical Entity succesfully saved!");
+    drupal_set_message("Physical Entity successfully saved!");
 }
 
 /**
