@@ -1,5 +1,5 @@
 name = Creates a Physical Entity
 description = A module for adding physical entities
-package = Customers
+package = Physical Entity
 core = 7.x
 

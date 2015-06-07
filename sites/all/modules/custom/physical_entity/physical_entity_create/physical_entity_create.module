@@ -5,13 +5,13 @@
  */
 function physical_entity_create_menu()
 {
-    $items['physical-entity/create'] = array(
+    $items['physical-entities/create'] = array(
         'title' => 'Create A Physical Entity',
         'page callback' => 'physical_entity_create_page',
         'access callback' => TRUE,
     );
 
-    $items['physical-entity/get-by-personal-id'] = array(
+    $items['physical-entities/get-by-personal-id'] = array(
         'page callback' => 'physical_entity_create_get_physical_entity_by_personal_id',
         'access callback' => TRUE,
     );
@@ -19,6 +19,11 @@ function physical_entity_create_menu()
     return $items;
 }
 
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
 function physical_entity_create_page()
 {
     return drupal_get_form('physical_entity_create_form');
@@ -37,13 +42,6 @@ function physical_entity_create_form($form, &$form_state)
     $form["first_name"] = array(
         "#type" => "textfield",
         '#title' => t('First Name'),
-        '#required' => TRUE,
-        "#default" => '',
-    );
-
-    $form["last_name"] = array(
-        "#type" => "textfield",
-        '#title' => t('Last Name'),
         '#required' => TRUE,
         "#default" => '',
     );
@@ -188,7 +186,7 @@ function physical_entity_create_form_submit($form, &$form_state)
     );
 
     $node->field_mobile_phone_number[$node->language] = array(
-        0 => array('value' => $form_state['values']['mobile_phone_number'])
+        0 => array('value' => $form_state['values']['mobile_phone'])
     );
 
     $node->field_email[$node->language] = array(

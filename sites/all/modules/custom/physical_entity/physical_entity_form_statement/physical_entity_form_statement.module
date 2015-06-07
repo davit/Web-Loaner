@@ -1,0 +1,191 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function physical_entity_form_statement_menu() {
+    $items['physical-entities/form-statements/create'] = array(
+        'title' => 'Physical Entity Statement Form',
+        'page callback' => 'physical_entity_form_statement_page',
+        'access callback' => TRUE,
+    );
+
+  return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return array|mixed
+ */
+function physical_entity_form_statement_page() {
+    return drupal_get_form('physical_entity_form_statement_form');
+}
+
+/**
+ * Implements hook_form().
+ * @param $form
+ * @param $form_state
+ * @return
+ * @internal param $form_state
+ */
+function physical_entity_form_statement_form($form, &$form_state) {
+
+    $physical_entities_obj = physical_entity_form_statement_get_physical_entities();
+    $physical_entities = array();
+    $personal_id_numbers = array();
+
+    foreach($physical_entities_obj as $physical_entity_obj) {
+        $physical_entities[$physical_entity_obj->nid] =
+            $physical_entity_obj->field_first_name['und'][0]['value'] . ' '.$physical_entity_obj->field_last_name['und'][0]['value'];
+
+        $personal_id_numbers[$physical_entity_obj->nid] = $physical_entity_obj->field_personal_id_number['und'][0]['value'];
+    }
+
+    $form["personal_id_numbers"] = array(
+        "#type" => "select",
+        '#title' => t('Personal ID Numbers'),
+        '#options' => $personal_id_numbers,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["physical_entities"] = array(
+        "#type" => "select",
+        '#title' => t('Physical Entities'),
+        '#options' => $physical_entities,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["principal_amount"] = array(
+        "#type" => "textfield",
+        '#title' => t('Principal Amount'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $currency = array(
+        'usd' => 'USD',
+        'gel' => 'GEL',
+    );
+
+    $form["currency"] = array(
+        "#type" => "select",
+        '#title' => t('Currency'),
+        '#options' => $currency,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["principal_amount"] = array(
+        "#type" => "textfield",
+        '#title' => t('Principal Amount'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $annual_interest_rates = array(
+        '18' => 18,
+        '30' => 30,
+        'other' => 'Other'
+    );
+
+    $form["annual_interest_rate"] = array(
+        "#type" => "select",
+        '#title' => t('Annual Interest Rate'),
+        '#options' => $annual_interest_rates,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["interest_rate_other"] = array(
+        "#type" => "textfield",
+        '#title' => t('Other Interest Rate'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["issue_date"] = array(
+        "#type" => "date",
+        '#title' => t('Issue Date'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["number_of_periods"] = array(
+        "#type" => "textfield",
+        '#title' => t('Number of Periods'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["loan_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Loan Number'),
+        '#value' => uniqid('#'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["principal_amount_fine"] = array(
+        "#type" => "textfield",
+        '#title' => t('Principal Amount Fine'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["interest_rate_fine"] = array(
+        "#type" => "textfield",
+        '#title' => t('Interest Rate Fine'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["grace_period"] = array(
+        "#type" => "textfield",
+        '#title' => t('Grace Period'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $repayment_schedule_types = array(
+        'discount rate' => 'Discount Rate'
+    );
+
+    $form["repayment_schedule_type"] = array(
+        "#type" => "select",
+        '#title' => t('Repayment Schedule Type'),
+        '#options' => $repayment_schedule_types,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+
+  return $form;
+}
+
+
+/**
+ * Get all physical entities
+ *
+ * @return array|bool|mixed
+ */
+function physical_entity_form_statement_get_physical_entities() {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity');
+
+    $result = $query->execute();
+
+    $physical_entities = array();
+
+    if (isset($result['node'])) {
+        $physical_entities_nids = array_keys($result['node']);
+        $physical_entities = entity_load('node', $physical_entities_nids);
+    }
+
+
+    return $physical_entities;
+}

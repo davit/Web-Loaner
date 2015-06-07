@@ -1,0 +1,10 @@
+name = Physical Entity Form Statement
+description = A form for creating a physical entity loan statement
+package = Physical Entity
+core = 7.x
+
+
+
+stylesheets[all][] = css/physical_entity_fs.css
+
+scripts[] = js/physical_entity_fs.js
