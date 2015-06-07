@@ -66,8 +66,8 @@ function physical_entity_form_statement_form($form, &$form_state) {
     );
 
     $currency = array(
-        'usd' => 'USD',
-        'gel' => 'GEL',
+        'USD' => 'USD',
+        'GEL' => 'GEL',
     );
 
     $form["currency"] = array(
@@ -88,7 +88,7 @@ function physical_entity_form_statement_form($form, &$form_state) {
     $annual_interest_rates = array(
         '18' => 18,
         '30' => 30,
-        'other' => 'Other'
+        'Other' => 'Other'
     );
 
     $form["annual_interest_rate"] = array(
@@ -150,7 +150,7 @@ function physical_entity_form_statement_form($form, &$form_state) {
     );
 
     $repayment_schedule_types = array(
-        'discount rate' => 'Discount Rate'
+        'Discount Rate' => 'Discount Rate'
     );
 
     $form["repayment_schedule_type"] = array(

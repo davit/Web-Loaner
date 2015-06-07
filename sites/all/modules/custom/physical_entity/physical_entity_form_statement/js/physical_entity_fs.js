@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
     });
 
     $('#edit-annual-interest-rate').on('change', function () {
-       if ($(this).val() == 'other') {
+       if ($(this).val() == 'Other') {
            $('.form-item-interest-rate-other').show();
        }else {
            $('.form-item-interest-rate-other').hide();
