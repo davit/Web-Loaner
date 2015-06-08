@@ -3,7 +3,6 @@ jQuery(document).ready(function($) {
     $('#edit-personal-id-number-input').on('keyup', function () {
         var $personalIdNumbers = $('#edit-personal-id-numbers');
         var $pattern = $(this).val();
-        var $input = $(this);
 
         $personalIdNumbers.find('option').each(function() {
             if ($(this).text().match("^"+$pattern) && $pattern.length !== 0) {
