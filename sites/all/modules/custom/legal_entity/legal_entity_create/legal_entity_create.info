@@ -1,0 +1,5 @@
+name = Legal Entity Create
+description = A module for adding legal entities
+package = Customers
+core = 7.x
+

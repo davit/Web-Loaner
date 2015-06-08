@@ -1,0 +1,167 @@
+<?php
+
+/**
+ * @file legal_entity_create.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function legal_entity_create_menu() {
+    $items['legal-entities/create'] = array(
+        'title' => 'Create A Legal Entity',
+        'page callback' => 'legal_entity_create_page',
+        'access callback' => TRUE,
+    );
+
+  return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function legal_entity_create_page() {
+    return drupal_get_form('legal_entity_create_form');
+}
+
+/**
+ * Implements hook_form().
+ */
+function legal_entity_create_form($node, &$form_state) {
+    $form["name"] = array(
+        "#type" => "textfield",
+        '#title' => t('Name'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $lag_entity_types = array(
+        'LLC' => t('LLC'),
+        'LTD' => t('LTD'),
+    );
+
+    $form["legal_entity_type"] = array(
+        "#type" => "select",
+        '#title' => t('Legal Entity Type'),
+        '#options' => $lag_entity_types,
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["legal_address"] = array(
+        "#type" => "textfield",
+        '#title' => t('Legal Address'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["factual_address"] = array(
+        "#type" => "textfield",
+        '#title' => t('Factual Address'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["registration_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Registration Number'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["mobile_phone_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Mobile Phone'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["home_phone_number"] = array(
+        "#type" => "textfield",
+        '#title' => t('Home Phone'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form["email"] = array(
+        "#type" => "textfield",
+        '#title' => t('Email'),
+        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+  return $form;
+}
+
+/**
+ * Implements hook_form_validate()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function legal_entity_create_form_validate($form, &$form_state) {
+  if (!valid_email_address($form_state['values']['email'])) {
+    form_set_error('email', t("Invalid email address"));
+  }
+}
+
+/**
+ * Implements hook_form_submit()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function legal_entity_create_form_submit($form, &$form_state)
+{
+    $node = new stdClass();
+    $node->type = 'legal_entity';
+    $node->title = $form_state['values']['name'];
+    node_object_prepare($node);
+
+    $node->language = LANGUAGE_NONE;
+
+    $node->field_name[$node->language] = array(
+        0 => array('value' => $form_state['values']['name'])
+    );
+
+    $node->field_legal_address[$node->language] = array(
+        0 => array('value' => $form_state['values']['legal_address'])
+    );
+
+    $node->field_factual_address[$node->language] = array(
+        0 => array('value' => $form_state['values']['factual_address'])
+    );
+
+    $node->field_registration_number[$node->language] = array(
+        0 => array('value' => $form_state['values']['registration_number'])
+    );
+
+    $node->field_mobile_phone_number[$node->language] = array(
+        0 => array('value' => $form_state['values']['mobile_phone_number'])
+    );
+
+    $node->field_home_phone[$node->language] = array(
+        0 => array('value' => $form_state['values']['home_phone_number'])
+    );
+
+    $node->field_email[$node->language] = array(
+        0 => array('value' => $form_state['values']['email'])
+    );
+
+    $node->field_legal_entity_type[$node->language] = array(
+        0 => array('value' => $form_state['values']['legal_entity_type'])
+    );
+
+    $node = node_submit($node);
+    node_save($node);
+
+    drupal_set_message("Legal Entity successfully saved!");
+}
