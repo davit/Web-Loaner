@@ -34,4 +34,7 @@ xmlrpc.php
 /profiles
 /scripts
 /themes
+
+# Inore PhpStorm configuration files
 .idea/
+

@@ -22,4 +22,5 @@ jQuery(document).ready(function($) {
            $('.form-item-interest-rate-other').hide();
        }
     });
+
 });
