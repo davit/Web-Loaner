@@ -2,4 +2,6 @@ name = Loan Calculator
 description = A client-side loan calculator
 package = General
 core = 7.x
-files[] = tests/loan_calculator.test
+
+
+scripts[] = js/loan-calculator.js

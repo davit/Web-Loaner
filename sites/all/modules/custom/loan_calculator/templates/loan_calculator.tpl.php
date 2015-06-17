@@ -18,7 +18,7 @@
             <input type="text" class="form-control" id="grace-period">
         </div>
     </div>
-    <div class="col-lg-8">
+    <div class="col-lg-8 loan-caluclator-table">
     <table class="table table-responsive">
         <thead>
             <tr>
