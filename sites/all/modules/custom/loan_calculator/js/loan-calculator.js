@@ -77,8 +77,11 @@ jQuery(document).ready(function ($) {
                 Math.round(principalSum).toFixed(2) +
                 '</th><th></th></tr>');
                 $('.loan-total').html('Total');
+
+                setExportLinkPaths($, loanTable.eq(0).prop('outerHTML'));
             }
         }
+
     });
 
 });
@@ -91,4 +94,17 @@ var pmt = function ($, interestRate, nper, principal) {
     var payment = principal * interestRate / (1 - Math.pow((1 + interestRate), -nper));
 
     return parseFloat(payment).toFixed(2);// Round to two decimal places
+};
+
+var setExportLinkPaths = function($, table) {
+    var pdfExport = $('.pdf-export');
+
+    pdfExport.show();
+
+    var $basepath = Drupal.settings.basePath;
+    var $pdfExportPath = $basepath+'export-pdf-ajax/works';
+
+    $('body').on('click', '.pdf-export', function() {
+        $.post($pdfExportPath);
+    });
 };

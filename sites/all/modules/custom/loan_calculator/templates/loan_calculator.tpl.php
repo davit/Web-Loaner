@@ -34,5 +34,12 @@
         </tbody>
 
     </table>
+
+        <?php if (1): ?>
+        <div class="pdf-export">
+            <button><?php echo t('Download PDF') ?></button>
+        </div>
+        <?php endif ?>
+
     </div>
 </div>
