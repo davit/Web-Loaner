@@ -98,8 +98,6 @@ var pmt = function ($, interestRate, nper, principal) {
 
 
 var setExportLinkPaths = function($, table) {
-    var pdfExport = $('.pdf-export-ajax');
-    pdfExport.show();
 
     table.attr('border', '1');
     var tableHtml = table.prop('outerHTML');
@@ -111,7 +109,20 @@ var setExportLinkPaths = function($, table) {
         fileName: 'loan-graph.pdf'
     };
 
+    var pdfExport = $('.pdf-export-ajax');
+    var body = $('body');
+
     $.post($pdfExportPath, fileData, function(file) {
         pdfExport.find('a').attr('href', file);
+        pdfExport.show();
+    });
+
+    
+    body.on('mouseover', '.pdf-export-ajax', function(){
+       $(this).find('i').css('background', '#C5C5C5');
+    });
+
+    body.on('mouseleave', '.pdf-export-ajax', function(){
+       $(this).find('i').css('background', 'none');
     });
 };
