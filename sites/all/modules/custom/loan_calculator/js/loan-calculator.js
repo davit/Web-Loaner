@@ -106,7 +106,7 @@ var setExportLinkPaths = function($, table) {
     var $pdfExportPath = $basepath+'export-pdf-ajax';
     var fileData = {
         html: tableHtml,
-        fileName: 'loan-graph.pdf'
+        fileName: new Date().getTime()+'.pdf'
     };
 
     var pdfExport = $('.pdf-export-ajax');
@@ -117,7 +117,7 @@ var setExportLinkPaths = function($, table) {
         pdfExport.show();
     });
 
-    
+
     body.on('mouseover', '.pdf-export-ajax', function(){
        $(this).find('i').css('background', '#C5C5C5');
     });
