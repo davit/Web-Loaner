@@ -9,10 +9,9 @@
  * Implements hook_menu().
  */
 function export_pdf_ajax_menu() {
-    $items['export-pdf-ajax/%'] = array(
+    $items['export-pdf-ajax'] = array(
         'title' => 'Export PDF',
         'page callback' => 'export_pdf_ajax_page',
-        'page arguments' => array(1),
         'access callback' => TRUE,
     );
 
@@ -22,10 +21,20 @@ function export_pdf_ajax_menu() {
 /**
  * hook_menu() callback
  *
- * @param $html
  * @return string
  */
-function export_pdf_ajax_page($html) {
+function export_pdf_ajax_page() {
+
+    $html = '';
+    $fileName = '';
+
+    if (!empty($_POST['html'])) {
+        $html = $_POST['html'];
+    }
+
+    if (!empty($_POST['fileName'])) {
+        $fileName = $_POST['fileName'];
+    }
 
     $pdf = tcpdf_get_instance();
 
@@ -48,8 +57,18 @@ function export_pdf_ajax_page($html) {
 
     $pdf->writeHTML($html);
 
-    $pdf->Output('graph.pdf', 'D');
+    $filePath = '';
 
+    if ($wrapper = file_stream_wrapper_get_instance_by_uri('public://')) {
+        $filePath = $wrapper->realpath();
+    }
+
+    $filePath = $filePath.'/export-pdf-ajax/';
+    $file = $filePath.$fileName;
+
+    $pdf->Output($file, 'F');
+
+    echo 'sites/default/files/export-pdf-ajax/'.$fileName;
 }
 
 

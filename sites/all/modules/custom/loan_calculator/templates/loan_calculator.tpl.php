@@ -36,8 +36,8 @@
     </table>
 
         <?php if (1): ?>
-        <div class="pdf-export">
-            <button><?php echo t('Download PDF') ?></button>
+        <div class="pdf-export-ajax">
+            <a href="#" target="_blank"><i class="fa fa-file-pdf-o fa-2x"></i></a>
         </div>
         <?php endif ?>
 

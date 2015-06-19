@@ -78,7 +78,7 @@ jQuery(document).ready(function ($) {
                 '</th><th></th></tr>');
                 $('.loan-total').html('Total');
 
-                setExportLinkPaths($, loanTable.eq(0).prop('outerHTML'));
+                setExportLinkPaths($, loanTable);
             }
         }
 
@@ -96,15 +96,33 @@ var pmt = function ($, interestRate, nper, principal) {
     return parseFloat(payment).toFixed(2);// Round to two decimal places
 };
 
-var setExportLinkPaths = function($, table) {
-    var pdfExport = $('.pdf-export');
 
-    pdfExport.show();
+var setExportLinkPaths = function($, table) {
+
+    table.attr('border', '1');
+    var tableHtml = table.prop('outerHTML');
 
     var $basepath = Drupal.settings.basePath;
-    var $pdfExportPath = $basepath+'export-pdf-ajax/works';
+    var $pdfExportPath = $basepath+'export-pdf-ajax';
+    var fileData = {
+        html: tableHtml,
+        fileName: new Date().getTime()+'.pdf'
+    };
 
-    $('body').on('click', '.pdf-export', function() {
-        $.post($pdfExportPath);
+    var pdfExport = $('.pdf-export-ajax');
+    var body = $('body');
+
+    $.post($pdfExportPath, fileData, function(file) {
+        pdfExport.find('a').attr('href', file);
+        pdfExport.show();
+    });
+
+
+    body.on('mouseover', '.pdf-export-ajax', function(){
+       $(this).find('i').css('background', '#C5C5C5');
+    });
+
+    body.on('mouseleave', '.pdf-export-ajax', function(){
+       $(this).find('i').css('background', 'none');
     });
 };

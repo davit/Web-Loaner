@@ -36,5 +36,29 @@ xmlrpc.php
 /themes
 
 # Inore PhpStorm configuration files
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion
+
+*.iml
+
+## Directory-based project format:
 .idea/
+# if you remove the above rule, at least ignore the following:
+
+# User-specific stuff:
+ .idea/workspace.xml
+ .idea/tasks.xml
+ .idea/dictionaries
+
+ .idea/dataSources.ids
+ .idea/dataSources.xml
+ .idea/sqlDataSources.xml
+ .idea/dynamic.xml
+ .idea/uiDesigner.xml
+
+# .idea/gradle.xml
+# .idea/libraries
+
+
+
+
 
