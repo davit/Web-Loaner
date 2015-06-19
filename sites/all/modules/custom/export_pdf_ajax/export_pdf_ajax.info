@@ -1,0 +1,6 @@
+name = Exprt PDF Ajax
+description = PDF export using html receiving through ajax
+package = Exports
+core = 7.x
+
+

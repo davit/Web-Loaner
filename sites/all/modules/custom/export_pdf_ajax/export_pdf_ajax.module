@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file export_pdf_ajax.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function export_pdf_ajax_menu() {
+    $items['export-pdf-ajax'] = array(
+        'title' => 'Export PDF',
+        'page callback' => 'export_pdf_ajax_page',
+        'access callback' => TRUE,
+    );
+
+  return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function export_pdf_ajax_page() {
+
+    $html = '';
+    $fileName = '';
+
+    if (!empty($_POST['html'])) {
+        $html = $_POST['html'];
+    }
+
+    if (!empty($_POST['fileName'])) {
+        $fileName = $_POST['fileName'];
+    }
+
+    $pdf = tcpdf_get_instance();
+
+    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    $pdf->SetFont('helvetica', '', 11);
+
+    $pdf->AddPage();
+
+    $pdf->writeHTML($html);
+
+    $filePath = '';
+
+    if ($wrapper = file_stream_wrapper_get_instance_by_uri('public://')) {
+        $filePath = $wrapper->realpath();
+    }
+
+    $filePath = $filePath.'/export-pdf-ajax/';
+    $file = $filePath.$fileName;
+
+    $pdf->Output($file, 'F');
+
+    echo 'sites/default/files/export-pdf-ajax/'.$fileName;
+}
+
+
+
+
+
+
+
+
+
+
+
+

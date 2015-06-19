@@ -5,3 +5,6 @@ core = 7.x
 
 
 scripts[] = js/loan-calculator.js
+scripts[] = js/export-links.js
+
+stylesheets[all][] = css/loan-calculator.css
