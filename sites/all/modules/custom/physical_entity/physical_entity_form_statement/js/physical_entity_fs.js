@@ -15,6 +15,12 @@ jQuery(document).ready(function($) {
         });
     });
 
+    $('#edit-personal-id-numbers').on('change', function() {
+        var $physicalEntity = $('#edit-physical-entity');
+
+        $physicalEntity.find('option[value="'+$(this).val()+'"]').attr('selected', true);
+    });
+
     $('#edit-annual-interest-rate').on('change', function () {
        if ($(this).val() == 'Other') {
            $('.form-item-interest-rate-other').show();

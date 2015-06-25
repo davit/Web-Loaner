@@ -37,7 +37,10 @@
 
         <?php if (1): ?>
         <div class="pdf-export-ajax">
-            <a href="#" target="_blank"><i class="fa fa-file-pdf-o fa-2x"></i></a>
+            <a href="#" target="_blank">
+                <img typeof="foaf:Image" src="http://webloaner.ge/sites/all/modules/contrib/views_pdf/images/pdf.png"
+                     alt="Physical Entity Statement Forms" title="Physical Entity Statement Forms">
+            </a>
         </div>
         <?php endif ?>
 
