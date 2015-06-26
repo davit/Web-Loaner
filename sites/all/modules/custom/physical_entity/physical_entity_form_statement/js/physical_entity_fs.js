@@ -29,4 +29,16 @@ jQuery(document).ready(function($) {
        }
     });
 
+
+    $('body').on('dblclick', '.view-physical-entity-statement-forms', function() {
+        var table = $(this).find('table');
+
+        if (!(table.hasClass('table-layout-auto'))) {
+            table.addClass('table-layout-auto');
+        }else {
+            table.removeClass('table-layout-auto');
+        }
+    });
+
+
 });

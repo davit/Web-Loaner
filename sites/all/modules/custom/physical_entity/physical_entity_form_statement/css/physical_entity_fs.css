@@ -1,3 +1,7 @@
 .form-item-interest-rate-other {
     display: none
 }
+
+.table-layout-auto {
+    table-layout: auto;
+}
