@@ -1,0 +1,6 @@
+name = Physical Entity Loan History
+description = A history of loan dynamics for a physical entity
+package = Physical Entity
+core = 7.x
+
+

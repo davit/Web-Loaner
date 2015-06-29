@@ -1,0 +1,59 @@
+<?php
+
+
+/**
+ * @file physical_entity_loan_history.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function physical_entity_loan_history_menu() {
+    $items['loan-history'] = array(
+        'title' => 'Export PDF',
+        'page callback' => 'physical_entity_loan_history_page',
+        'access callback' => TRUE,
+    );
+
+  return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function physical_entity_loan_history_page() {
+    return "works";
+}
+
+
+/**
+ * Implements hook_cron()
+ */
+function physical_entity_loan_history_cron() {
+    $latest_issued_loan = physical_entity_form_statement_get_latest_issued_loan();
+    $latest_issued_loan = current($latest_issued_loan);
+
+    $node = new stdClass();
+    $node->type = 'loan_history';
+    $node->title = $latest_issued_loan->field_loan_number['und'][0]['value'];
+    node_object_prepare($node);
+
+    $node->language = LANGUAGE_NONE;
+
+    $node->field_operation_date[$node->language] = array(
+//        0 => array('value' => $form_state['values']['first_name'])
+    );
+}
+
+
+
+
+
+
+
+
+
+

@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
                 tfoot.empty();
             }
 
-            var interest = parseFloat(interestRate.val() * 0.01 / 12 * loanAmount.val()).toFixed(2); // Per month
+            var interest = parseFloat(interestRate.val() * 0.01 / 365 * loanAmount.val()).toFixed(2); // Per month
             var totalPayment = pmt($, interestRate.val(), monthRows.val(), loanAmount.val());
             var principal = parseFloat(totalPayment - interest).toFixed(2);
 

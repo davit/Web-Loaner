@@ -32,6 +32,7 @@
         <tbody>
 
         </tbody>
+        <tfoot></tfoot>
 
     </table>
 
