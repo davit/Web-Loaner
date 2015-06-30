@@ -140,3 +140,8 @@ table tr:hover td {
 .fa.fa-ban.rejected {
     color: red;
 }
+
+.node.node-physical-entity-loan {
+    float: left;
+    margin-right: 3em;
+}
