@@ -69,7 +69,7 @@ function export_pdf_ajax_page() {
 
     $pdf->Output($file, 'F');
 
-    echo 'sites/default/files/export-pdf-ajax/'.$fileName;
+    echo '/sites/default/files/export-pdf-ajax/'.$fileName;
 }
 
 
