@@ -53,7 +53,7 @@ jQuery(document).ready(function ($) {
                     + totalPayment + '</td><td>'
                     + interest + '</td><td>'
                     + principal + '</td><td>'
-                    + balance + '</td></tr>');
+                    + parseFloat(balance).toFixed(2) + '</td></tr>');
 
                     interest = parseFloat(interestRate.val() * 0.01 / 12 * balance).toFixed(2);
 
@@ -114,7 +114,7 @@ var setExportLinkPaths = function($, table) {
 
     $.post($pdfExportPath, fileData, function(file) {
         pdfExport.find('a').attr('href', file);
-        pdfExport.show();
+        //pdfExport.show();
     });
 
 

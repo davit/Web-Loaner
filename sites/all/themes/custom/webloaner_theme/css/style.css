@@ -145,3 +145,7 @@ table tr:hover td {
     float: left;
     margin-right: 3em;
 }
+
+.view .pdf-export-ajax {
+    float: none;
+}

@@ -19,8 +19,6 @@ jQuery(document).ready(function ($) {
         var totalPayment = pmt($, interestRate.text(), monthRows.text(), loanAmount.text());
         var principal = parseFloat(totalPayment - interest).toFixed(2);
 
-        //alert(loanAmount.text() + ' ' + interestRate.text() + ' ' + monthRows.text() + ' ' + gracePeriod.text());
-
         var totalPaymentSum = 0;
         var interestSum = 0;
         var principalSum = 0;
@@ -54,7 +52,7 @@ jQuery(document).ready(function ($) {
                 + totalPayment + '</td><td>'
                 + interest + '</td><td>'
                 + principal + '</td><td>'
-                + balance + '</td></tr>');
+                + parseFloat(balance).toFixed(2) + '</td></tr>');
 
                 interest = parseFloat(interestRate.text() * 0.01 / 12 * balance).toFixed(2);
 
@@ -79,9 +77,10 @@ jQuery(document).ready(function ($) {
             '</th><th></th></tr>');
             $('.loan-total').html('Total');
 
-            setExportLinkPaths($, loanTable);
         }
     }
+
+    setExportLinkPaths($, loanTable);
 
 });
 
