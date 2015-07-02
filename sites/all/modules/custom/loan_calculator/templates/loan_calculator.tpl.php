@@ -2,7 +2,7 @@
     <div class="col-lg-4">
         <div class="form-group">
             <label for="loan-amount">Loan Amount</label>
-            <small class="loan-amount-span">(1000-15000 USD)</small>
+            <small class="loan-amount-span"></small>
             <input type="text" class="form-control" id="loan-amount">
         </div>
         <div class="form-group">

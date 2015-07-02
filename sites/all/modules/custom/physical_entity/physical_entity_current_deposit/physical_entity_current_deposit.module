@@ -1,0 +1,163 @@
+<?php
+
+/**
+ * Implements hook_menu
+ */
+function physical_entity_current_deposit_menu()
+{
+    $items['physical-entities/add-deposit'] = array(
+        'title' => 'Create A Physical Entity',
+        'page callback' => 'physical_entity_current_deposit_page',
+        'access callback' => TRUE,
+    );
+
+//    $items['physical-entities/get-by-personal-id'] = array(
+//        'page callback' => 'physical_entity_current_deposit_get_physical_entity_by_personal_id',
+//        'access callback' => TRUE,
+//    );
+
+    return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function physical_entity_current_deposit_page()
+{
+    return drupal_get_form('physical_entity_current_deposit_form');
+}
+
+/**
+ * @Implements the hook_form()
+ *
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function physical_entity_current_deposit_form($form, &$form_state)
+{
+
+    $form["physical_entity"] = array(
+        "#type" => "textfield",
+        '#title' => t('Physical Entity'),
+//        '#required' => TRUE,
+        "#default" => '',
+    );
+
+    $currency = array(
+        'USD' => 'USD',
+        'GEL' => 'GEL',
+    );
+
+    $form['currency'] = array(
+        '#type' => 'select',
+        '#title' => t('Currency'),
+        '#options' => $currency,
+//        '#required' => TRUE,
+        '#default' => 'GEL',
+    );
+
+    $form['amount'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Amount'),
+//        '#required' => TRUE,
+        '#default' => '',
+    );
+
+    $form['date'] = array(
+        '#type' => 'date_popup',
+        '#title' => t('Date'),
+        '#date_label_position' => 'within',
+        '#date_format' => 'Y-m-d',
+        '#default' => date('Y-m-d')
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+    return $form;
+}
+
+
+/**
+ * Implements hook_form_validate()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function physical_entity_current_deposit_form_validate($form, &$form_state)
+{
+
+
+}
+
+
+/**
+ * Implements hook_form_submit()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function physical_entity_current_deposit_form_submit($form, &$form_state)
+{
+    $node = new stdClass();
+    $node->type = 'actual_deposits';
+    $node->title = 'Test title';
+    node_object_prepare($node);
+
+    $node->language = LANGUAGE_NONE;
+
+    $node->field_physical_entity[$node->language][] = array(
+        'target_id' => $form_state['values']['physical_entity'],
+        'target_type' => 'node',
+    );
+
+    $node->field_currency[$node->language] = array(
+        0 => array('value' => $form_state['values']['currency'])
+    );
+
+    $node->field_amount[$node->language] = array(
+        0 => array('value' => $form_state['values']['amount'])
+    );
+
+    $node->field_date[$node->language] = array(
+        0 => array('value' => date('Y-m-d'))
+    );
+
+
+    $node = node_submit($node);
+    node_save($node);
+
+    drupal_set_message("Actual deposit successfully saved");
+}
+
+/**
+ * Get Physical Entity by its Personal ID Number
+ *
+ * @param $personal_id_number
+ * @internal param $personal_id
+ * @return array|bool|mixed
+ */
+//function physical_entity_current_deposit_get_physical_entity_by_personal_id($personal_id_number)
+//{
+//    $query = new EntityFieldQuery();
+//
+//    $query->entityCondition('entity_type', 'node')
+//        ->entityCondition('bundle', 'physical_entity')
+//        ->fieldCondition('field_personal_id_number', 'value', $personal_id_number, '=');
+//
+//    $result = $query->execute();
+//
+//    $physical_entity = array();
+//
+//    if (isset($result['node'])) {
+//        $physical_entity_ids = array_keys($result['node']);
+//        $physical_entity = node_load($physical_entity_ids[0]);
+//    }
+//
+//    return $physical_entity;
+//}

@@ -118,11 +118,11 @@ var setExportLinkPaths = function($, table) {
     });
 
 
-    body.on('mouseover', '.pdf-export-ajax', function(){
-       $(this).find('i').css('background', '#C5C5C5');
-    });
-
-    body.on('mouseleave', '.pdf-export-ajax', function(){
-       $(this).find('i').css('background', 'none');
-    });
+    //body.on('mouseover', '.pdf-export-ajax', function(){
+    //   $(this).find('i').css('background', '#C5C5C5');
+    //});
+    //
+    //body.on('mouseleave', '.pdf-export-ajax', function(){
+    //   $(this).find('i').css('background', 'none');
+    //});
 };

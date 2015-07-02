@@ -1,0 +1,5 @@
+name = Physical Entity Current Deposit
+description = A module for adding deposits
+package = Physical Entity
+core = 7.x
+
