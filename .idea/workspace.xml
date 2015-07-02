@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa83bcb6-5586-42e4-b3c3-3466c1e96a58" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/js/loan-calculator.js" afterPath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/js/loan-calculator.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/templates/loan_calculator.tpl.php" afterPath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/templates/loan_calculator.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="fa83bcb6-5586-42e4-b3c3-3466c1e96a58" name="Default" comment="" />
     <ignored path="public_html.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
