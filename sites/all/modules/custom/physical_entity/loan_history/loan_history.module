@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * Implements hook_menu
+ */
+function loan_history_menu() {
+    $items['physical-entities/loan-history'] = array(
+        'title' => 'Create A Physical Entity',
+        'page callback' => 'loan_history_page',
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+
+/**
+ * hook_menu() callback
+ */
+function loan_history_page() {
+    $var = loan_history_get_clients_with_issued_loans();
+    
+}
+
+function loan_history_crone() {
+
+}
+
+
+function loan_history_calculate_current_balance() {
+//    $pe_with_issued_loans = loan_history_get_clients_with_issued_loans();
+//
+//    print_r($pe_with_issued_loans); exit;
+}
+
+/**
+ * Get all client_ids whose loans have been issued
+ *
+ * @return array|bool|mixed
+ */
+function loan_history_get_clients_with_issued_loans() {
+
+    $query = new EntityFieldQuery();
+
+    $issued_status_id = physical_entity_form_statement_get_loan_status_id('Issued');
+
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity_loan')
+        ->fieldCondition('field_loan_status', 'target_id', $issued_status_id, '=');
+
+    $result = $query->execute();
+
+    $statement_forms = array();
+    $physical_entity_ids = array();
+
+    if (isset($result['node'])) {
+        $statement_forms = entity_load('node', array_keys($result['node']));
+    }
+
+    foreach ($statement_forms as $key => $form) {
+        $physical_entity_ids[$key] = $form->field_physical_entity['und'][0]['target_id'];
+    }
+
+    return $physical_entity_ids;
+
+}
+

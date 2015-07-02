@@ -1,0 +1,5 @@
+name = Loan History
+description = A module for automatic loan tracking
+package = Physical Entity
+core = 7.x
+
