@@ -233,3 +233,29 @@ function physical_entity_create_get_physical_entity_by_personal_id($personal_id_
 
     return $physical_entity;
 }
+
+/**
+ * Get Physical Entity by nid
+ *
+ * @param $nid
+ * @return array|bool|mixed
+ */
+function physical_entity_create_get_physical_entity_by_nid($nid)
+{
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity')
+        ->propertyCondition('nid', $nid);
+
+    $result = $query->execute();
+
+    $physical_entity = array();
+
+    if (isset($result['node'])) {
+        $physical_entity_ids = array_keys($result['node']);
+        $physical_entity = node_load($physical_entity_ids[0]);
+    }
+
+    return $physical_entity;
+}

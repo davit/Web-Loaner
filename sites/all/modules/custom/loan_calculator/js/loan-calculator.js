@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
                 tfoot.empty();
             }
 
-            var interest = parseFloat(interestRate.val() * 0.01 / 365 * loanAmount.val()).toFixed(2); // Per month
+            var interest = parseFloat(interestRate.val() * 0.01 / monthRows.val() * loanAmount.val()).toFixed(2); // Per month
             var totalPayment = pmt($, interestRate.val(), monthRows.val(), loanAmount.val());
             var principal = parseFloat(totalPayment - interest).toFixed(2);
 
@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
                     + principal + '</td><td>'
                     + parseFloat(balance).toFixed(2) + '</td></tr>');
 
-                    interest = parseFloat(interestRate.val() * 0.01 / 12 * balance).toFixed(2);
+                    interest = parseFloat(interestRate.val() * 0.01 / monthRows.val() * balance).toFixed(2);
 
                     if (rc >= gracePeriod.val()) {
                         totalPayment = pmt($, interestRate.val(), monthRows.val() - gracePeriod.val(), loanAmount.val());

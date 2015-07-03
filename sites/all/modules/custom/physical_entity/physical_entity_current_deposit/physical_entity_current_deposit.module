@@ -39,11 +39,38 @@ function physical_entity_current_deposit_page()
 function physical_entity_current_deposit_form($form, &$form_state)
 {
 
-    $form["physical_entity"] = array(
-        "#type" => "textfield",
-        '#title' => t('Physical Entity'),
+    $physical_entities_obj = physical_entity_form_statement_get_physical_entities();
+    $physical_entities = array();
+    $personal_id_numbers = array();
+
+    foreach($physical_entities_obj as $physical_entity_obj) {
+        $physical_entities[$physical_entity_obj->nid] =
+            $physical_entity_obj->field_first_name['und'][0]['value'] . ' '.$physical_entity_obj->field_last_name['und'][0]['value'];
+
+        $personal_id_numbers[$physical_entity_obj->nid] = $physical_entity_obj->field_personal_id_number['und'][0]['value'];
+    }
+
+    $form['personal_id_number_input'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Personal ID Numbers'),
+        '#maxlength' => 11,
+        '#default' => '',
+    );
+
+    $form['personal_id_numbers'] = array(
+        '#type' => 'select',
+        '#options' => $personal_id_numbers,
 //        '#required' => TRUE,
-        "#default" => '',
+        '#default' => '',
+    );
+
+
+    $form['physical_entity'] = array(
+        '#type' => 'select',
+        '#title' => t('Physical Entities'),
+        '#options' => $physical_entities,
+        '#required' => TRUE,
+        '#default' => '',
     );
 
     $currency = array(
@@ -83,17 +110,17 @@ function physical_entity_current_deposit_form($form, &$form_state)
 }
 
 
-/**
- * Implements hook_form_validate()
- *
- * @param $form
- * @param $form_state
- */
-function physical_entity_current_deposit_form_validate($form, &$form_state)
-{
-
-
-}
+///**
+// * Implements hook_form_validate()
+// *
+// * @param $form
+// * @param $form_state
+// */
+//function physical_entity_current_deposit_form_validate($form, &$form_state)
+//{
+//
+//
+//}
 
 
 /**
@@ -106,13 +133,16 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
 {
     $node = new stdClass();
     $node->type = 'actual_deposits';
-    $node->title = 'Test title';
+    $physical_entity_nid = $form_state['values']['physical_entity'];
+    $physical_entity = physical_entity_create_get_physical_entity_by_nid($physical_entity_nid);
+    $node->title = $physical_entity->title;
     node_object_prepare($node);
 
     $node->language = LANGUAGE_NONE;
 
+
     $node->field_physical_entity[$node->language][] = array(
-        'target_id' => $form_state['values']['physical_entity'],
+        'target_id' => $physical_entity_nid,
         'target_type' => 'node',
     );
 
@@ -125,7 +155,7 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
     );
 
     $node->field_date[$node->language] = array(
-        0 => array('value' => date('Y-m-d'))
+        0 => array('value' => $form_state['values']['date'])
     );
 
 
@@ -147,7 +177,7 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
 //    $query = new EntityFieldQuery();
 //
 //    $query->entityCondition('entity_type', 'node')
-//        ->entityCondition('bundle', 'physical_entity')
+//        ->entityCondition('bundle', 'actual_deposits')
 //        ->fieldCondition('field_personal_id_number', 'value', $personal_id_number, '=');
 //
 //    $result = $query->execute();

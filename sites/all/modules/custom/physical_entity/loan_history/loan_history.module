@@ -17,19 +17,146 @@ function loan_history_menu() {
  * hook_menu() callback
  */
 function loan_history_page() {
-    $var = loan_history_get_clients_with_issued_loans();
-    
+    loan_history_calculate_current_balance();
 }
 
 function loan_history_crone() {
 
 }
 
+/**
+ * select sum(amount) from actual_deposits where date <= today-1 and client_id
+ * select sum(actual_total) from loan_history where rep_date <= today-1
+ */
 
 function loan_history_calculate_current_balance() {
-//    $pe_with_issued_loans = loan_history_get_clients_with_issued_loans();
-//
-//    print_r($pe_with_issued_loans); exit;
+
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'actual_deposits')
+        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=');
+
+    $result = $query->execute();
+
+    $actual_deposits = array();
+    $physical_entities_with_issued_loans = loan_history_get_clients_with_issued_loans();
+    $field_amount_sum = array();
+
+    if (isset($result['node'])) {
+        $actual_deposits = entity_load('node', array_keys($result['node']));
+    }
+
+    foreach($actual_deposits as $deposit) {
+        if (array_key_exists($deposit->field_physical_entity['und'][0]['target_id'], $field_amount_sum)) {
+            $field_amount_sum[$deposit->field_physical_entity['und'][0]['target_id']] += $deposit->field_amount['und'][0]['value'];
+        }
+        else {
+            $field_amount_sum[$deposit->field_physical_entity['und'][0]['target_id']] += $deposit->field_amount['und'][0]['value'];
+        }
+    }
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'loan_history')
+        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=');
+
+    $result = $query->execute();
+
+    $loan_histories =array();
+
+    if (isset($result['node'])) {
+        $loan_histories = entity_load('node', array_keys($result['node']));
+    }
+
+    foreach ($loan_histories as $history) {
+        if (array_key_exists($history->field_physical_entity['und'][0]['target_id'], $field_amount_sum)) {
+            $field_amount_sum[$history->field_physical_entity['und'][0]['target_id']] -= $history->field_actual_total_amount['und'][0]['value'];
+        }
+        else {
+            $field_amount_sum[$history->field_physical_entity['und'][0]['target_id']] -= $history->field_actual_total_amount['und'][0]['value'];
+        }
+    }
+
+}
+
+function loan_history_repayments_schedule($loan_id) {
+    $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
+
+//    file_put_contents('/home/davit/development/webroot/webloaner.ge/public_html/sites/default/files/dave.txt',
+//    $loan_id);
+
+//    exit;
+
+    $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
+    $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
+    $annual_interest_rate = $loan_statement->field_annual_interest_rate['und'][0]['value'];
+    $issue_date = $loan_statement->field_issue_date['und'][0]['value'];
+
+    $total_amount = pmt($annual_interest_rate, $number_of_periods, $principal_amount);
+    $repayment_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
+    $interest = $principal_amount * $annual_interest_rate  * 0.01 / 12;
+    $principal = $total_amount - $interest;
+
+    /*** begin **/
+    $node = new stdClass();
+    $node->type = 'loan_history';
+    $node->title = $loan_id;
+    node_object_prepare($node);
+
+    $node->language = LANGUAGE_NONE;
+
+    for ($n = 1; $n <= 2; $n++) {
+
+        if ($n > 1) {
+            $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime($issue_date)));
+            $interest = $principal * $annual_interest_rate  * 0.01 / 12;
+            $principal = $total_amount;
+        }
+
+        $node->field_physical_entity[$node->language][] = array(
+            'target_id' => $loan_statement->field_physical_entity['und'][0]['target_id'],
+            'target_type' => 'node',
+        );
+
+        $node->field_physical_entity_loan[$node->language][] = array(
+            'target_id' => $loan_id,
+            'target_type' => 'node',
+        );
+
+        $node->field_repayment_date[$node->language] = array(
+            0 => array('value' => $repayment_date)
+        );
+
+        $node->field_total_amount[$node->language] = array(
+            0 => array('value' => $total_amount)
+        );
+
+        $node->field_interest[$node->language] = array(
+            0 => array('value' => $interest)
+        );
+
+        $node->field_principal[$node->language] = array(
+            0 => array('value' => $principal)
+        );
+
+        $node = node_submit($node);
+        node_save($node);
+    }
+
+
+}
+
+function loan_history_update_loan_history($amount_sum) {
+
+}
+
+function pmt($interestRate, $nper, $principal) {
+
+    $interestRate = $interestRate * 0.01 / 12;
+
+    $payment = $principal * $interestRate / (1 - pow((1 + $interestRate), -$nper));
+
+    return round($payment, 2); //Round to two decimal places
 }
 
 /**
@@ -38,8 +165,6 @@ function loan_history_calculate_current_balance() {
  * @return array|bool|mixed
  */
 function loan_history_get_clients_with_issued_loans() {
-
-    $query = new EntityFieldQuery();
 
     $issued_status_id = physical_entity_form_statement_get_loan_status_id('Issued');
 
@@ -65,4 +190,6 @@ function loan_history_get_clients_with_issued_loans() {
     return $physical_entity_ids;
 
 }
+
+
 
