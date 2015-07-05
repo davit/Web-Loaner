@@ -31,6 +31,10 @@ function legal_entity_create_page() {
  * Implements hook_form().
  */
 function legal_entity_create_form($node, &$form_state) {
+
+    $form['#prefix'] = '<div class="col-lg-4">';
+    $form['#suffix'] = '</div>';
+
     $form["name"] = array(
         "#type" => "textfield",
         '#title' => t('Name'),

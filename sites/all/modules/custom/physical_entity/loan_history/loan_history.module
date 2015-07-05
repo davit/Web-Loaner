@@ -82,10 +82,6 @@ function loan_history_calculate_current_balance() {
 function loan_history_repayments_schedule($loan_id) {
     $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
 
-//    file_put_contents('/home/davit/development/webroot/webloaner.ge/public_html/sites/default/files/dave.txt',
-//    $loan_id);
-
-//    exit;
 
     $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
     $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
@@ -97,7 +93,6 @@ function loan_history_repayments_schedule($loan_id) {
     $interest = $principal_amount * $annual_interest_rate  * 0.01 / 12;
     $principal = $total_amount - $interest;
 
-    /*** begin **/
     $node = new stdClass();
     $node->type = 'loan_history';
     $node->title = $loan_id;
@@ -106,7 +101,6 @@ function loan_history_repayments_schedule($loan_id) {
     $node->language = LANGUAGE_NONE;
 
     for ($n = 1; $n <= 2; $n++) {
-
         if ($n > 1) {
             $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime($issue_date)));
             $interest = $principal * $annual_interest_rate  * 0.01 / 12;
@@ -145,6 +139,14 @@ function loan_history_repayments_schedule($loan_id) {
 
 
 }
+
+/**
+ * Implements hook_cron().
+ */
+function loan_history_cron() {
+
+}
+
 
 function loan_history_update_loan_history($amount_sum) {
 

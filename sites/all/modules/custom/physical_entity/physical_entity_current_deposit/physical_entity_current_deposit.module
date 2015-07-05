@@ -11,11 +11,6 @@ function physical_entity_current_deposit_menu()
         'access callback' => TRUE,
     );
 
-//    $items['physical-entities/get-by-personal-id'] = array(
-//        'page callback' => 'physical_entity_current_deposit_get_physical_entity_by_personal_id',
-//        'access callback' => TRUE,
-//    );
-
     return $items;
 }
 
@@ -38,8 +33,7 @@ function physical_entity_current_deposit_page()
  */
 function physical_entity_current_deposit_form($form, &$form_state)
 {
-
-    $physical_entities_obj = physical_entity_form_statement_get_physical_entities();
+    $physical_entities_obj = get_physical_entities_with_issued_loans();
     $physical_entities = array();
     $personal_id_numbers = array();
 
@@ -49,6 +43,9 @@ function physical_entity_current_deposit_form($form, &$form_state)
 
         $personal_id_numbers[$physical_entity_obj->nid] = $physical_entity_obj->field_personal_id_number['und'][0]['value'];
     }
+
+    $form['#prefix'] = '<div class="col-lg-4">';
+    $form['#suffix'] = '</div>';
 
     $form['personal_id_number_input'] = array(
         '#type' => 'textfield',
@@ -110,19 +107,6 @@ function physical_entity_current_deposit_form($form, &$form_state)
 }
 
 
-///**
-// * Implements hook_form_validate()
-// *
-// * @param $form
-// * @param $form_state
-// */
-//function physical_entity_current_deposit_form_validate($form, &$form_state)
-//{
-//
-//
-//}
-
-
 /**
  * Implements hook_form_submit()
  *
@@ -158,36 +142,44 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
         0 => array('value' => $form_state['values']['date'])
     );
 
-
     $node = node_submit($node);
     node_save($node);
 
     drupal_set_message("Actual deposit successfully saved");
 }
 
-/**
- * Get Physical Entity by its Personal ID Number
- *
- * @param $personal_id_number
- * @internal param $personal_id
- * @return array|bool|mixed
- */
-//function physical_entity_current_deposit_get_physical_entity_by_personal_id($personal_id_number)
-//{
-//    $query = new EntityFieldQuery();
-//
-//    $query->entityCondition('entity_type', 'node')
-//        ->entityCondition('bundle', 'actual_deposits')
-//        ->fieldCondition('field_personal_id_number', 'value', $personal_id_number, '=');
-//
-//    $result = $query->execute();
-//
-//    $physical_entity = array();
-//
-//    if (isset($result['node'])) {
-//        $physical_entity_ids = array_keys($result['node']);
-//        $physical_entity = node_load($physical_entity_ids[0]);
-//    }
-//
-//    return $physical_entity;
-//}
+function get_physical_entities_with_issued_loans() {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity_loan')
+        ->fieldCondition('field_loan_status', 'target_id', physical_entity_form_statement_get_loan_status_id('Issued'), '=');
+    $result = $query->execute();
+
+    $statement_forms = array();
+
+    if (isset($result['node'])) {
+        $statement_forms = entity_load('node', array_keys($result['node']));
+    }
+
+    $physical_entity_ids = array();
+    $physical_entities = array();
+
+    foreach($statement_forms as $form) {
+        array_push($physical_entity_ids, $form->field_physical_entity['und'][0]['target_id']);
+    }
+
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'physical_entity')
+        ->propertyCondition('nid', $physical_entity_ids, 'IN');
+    $result = $query->execute();
+
+    if (isset($result['node'])) {
+        $physical_entities = entity_load('node', array_keys($result['node']));
+    }
+
+
+    return $physical_entities;
+}

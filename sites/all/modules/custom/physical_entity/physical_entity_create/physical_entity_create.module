@@ -38,6 +38,8 @@ function physical_entity_create_page()
  */
 function physical_entity_create_form($form, &$form_state)
 {
+    $form['#prefix'] = '<div class="col-lg-4">';
+    $form['#suffix'] = '</div>';
 
     $form["first_name"] = array(
         "#type" => "textfield",
@@ -66,6 +68,14 @@ function physical_entity_create_form($form, &$form_state)
         '#required' => TRUE,
         '#maxlength' => 11,
         "#default" => '',
+    );
+
+    $form['date_of_birth'] = array(
+        '#type' => 'date_popup',
+        '#title' => t('Date of Birth'),
+        '#date_label_position' => 'within',
+        '#date_format' => 'Y-m-d',
+        '#default' => date('Y-m-d')
     );
 
     $form["home_phone"] = array(
@@ -179,6 +189,10 @@ function physical_entity_create_form_submit($form, &$form_state)
 
     $node->field_personal_id_number[$node->language] = array(
         0 => array('value' => $form_state['values']['personal_id_number'])
+    );
+
+    $node->field_date_of_birth[$node->language] = array(
+        0 => array('value' => $form_state['values']['date_of_birth'])
     );
 
     $node->field_home_phone[$node->language] = array(
