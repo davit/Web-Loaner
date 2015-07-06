@@ -6,7 +6,7 @@
 function physical_entity_current_deposit_menu()
 {
     $items['physical-entities/add-deposit'] = array(
-        'title' => 'Create A Physical Entity',
+        'title' => 'Add Deposit',
         'page callback' => 'physical_entity_current_deposit_page',
         'access callback' => TRUE,
     );
@@ -21,6 +21,9 @@ function physical_entity_current_deposit_menu()
  */
 function physical_entity_current_deposit_page()
 {
+//    $loan_statement = physical_entity_form_statement_get_statement_form_by_nid(48);
+//    print $loan_statement->field_issue_date['und'][0]['value'];
+//    exit;
     return drupal_get_form('physical_entity_current_deposit_form');
 }
 
@@ -123,7 +126,6 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
     node_object_prepare($node);
 
     $node->language = LANGUAGE_NONE;
-
 
     $node->field_physical_entity[$node->language][] = array(
         'target_id' => $physical_entity_nid,

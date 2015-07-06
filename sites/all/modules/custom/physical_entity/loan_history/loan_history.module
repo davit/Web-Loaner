@@ -82,7 +82,6 @@ function loan_history_calculate_current_balance() {
 function loan_history_repayments_schedule($loan_id) {
     $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
 
-
     $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
     $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
     $annual_interest_rate = $loan_statement->field_annual_interest_rate['und'][0]['value'];
@@ -93,14 +92,16 @@ function loan_history_repayments_schedule($loan_id) {
     $interest = $principal_amount * $annual_interest_rate  * 0.01 / 12;
     $principal = $total_amount - $interest;
 
-    $node = new stdClass();
-    $node->type = 'loan_history';
-    $node->title = $loan_id;
-    node_object_prepare($node);
 
-    $node->language = LANGUAGE_NONE;
+    for ($n = 1; $n <= $number_of_periods; $n++) {
 
-    for ($n = 1; $n <= 2; $n++) {
+        $node = new stdClass();
+        $node->type = 'loan_history';
+        $node->title = $loan_id;
+        node_object_prepare($node);
+
+        $node->language = LANGUAGE_NONE;
+
         if ($n > 1) {
             $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime($issue_date)));
             $interest = $principal * $annual_interest_rate  * 0.01 / 12;
@@ -136,8 +137,6 @@ function loan_history_repayments_schedule($loan_id) {
         $node = node_submit($node);
         node_save($node);
     }
-
-
 }
 
 /**
