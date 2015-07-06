@@ -84,14 +84,11 @@ function loan_history_repayments_schedule($loan_id) {
 
     $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
     $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
-    $annual_interest_rate = $loan_statement->field_annual_interest_rate['und'][0]['value'];
-    $issue_date = $loan_statement->field_issue_date['und'][0]['value'];
+    $annual_interest_rate = round($loan_statement->field_annual_interest_rate['und'][0]['value'], 2);
+    $issue_date = date('Y-m-d', strtotime($loan_statement->field_issue_date['und'][0]['value']));
 
     $total_amount = pmt($annual_interest_rate, $number_of_periods, $principal_amount);
-    $repayment_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
-    $interest = $principal_amount * $annual_interest_rate  * 0.01 / 12;
-    $principal = $total_amount - $interest;
-
+    $balance = $principal_amount;
 
     for ($n = 1; $n <= $number_of_periods; $n++) {
 
@@ -102,11 +99,11 @@ function loan_history_repayments_schedule($loan_id) {
 
         $node->language = LANGUAGE_NONE;
 
-        if ($n > 1) {
-            $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime($issue_date)));
-            $interest = $principal * $annual_interest_rate  * 0.01 / 12;
-            $principal = $total_amount;
-        }
+        $issue_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
+        $interest = round(round($balance, 2) * $annual_interest_rate  * 0.01 / 12, 2);
+        $principal = round($total_amount - $interest, 2);
+
+        $balance -= $principal;
 
         $node->field_physical_entity[$node->language][] = array(
             'target_id' => $loan_statement->field_physical_entity['und'][0]['target_id'],
@@ -119,19 +116,27 @@ function loan_history_repayments_schedule($loan_id) {
         );
 
         $node->field_repayment_date[$node->language] = array(
-            0 => array('value' => $repayment_date)
+            0 => array('value' => $issue_date)
         );
 
         $node->field_total_amount[$node->language] = array(
             0 => array('value' => $total_amount)
         );
 
-        $node->field_interest[$node->language] = array(
+        $node->field_actual_total_amount[$node->language] = array(
+            0 => array('value' => $principal_amount)
+        );
+
+        $node->field_interest_accrued[$node->language] = array(
             0 => array('value' => $interest)
         );
 
         $node->field_principal[$node->language] = array(
             0 => array('value' => $principal)
+        );
+
+        $node->field_balance[$node->language] = array(
+            0 => array('value' => round($balance, 2))
         );
 
         $node = node_submit($node);
