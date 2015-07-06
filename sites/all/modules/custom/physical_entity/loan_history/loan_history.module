@@ -22,7 +22,6 @@ function loan_history_page() {
 
 function loan_history_crone() {
 
-
 }
 
 /**
@@ -69,7 +68,9 @@ function loan_history_calculate_current_balance($client_id) {
     }
 
     foreach ($loan_histories as $history) {
-        $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
+        if (isset($history->field_actual_total_amount)) {
+//            $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
+        }
     }
 
 
@@ -104,6 +105,19 @@ function loan_history_insert_balance($balance, $client_id) {
 
         $node = node_submit($node);
         node_save($node);
+    }else {
+        $entities = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'current_balance')
+            ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=')
+            ->execute();
+
+        if (!empty($entities['node'])) {
+            $node = node_load('node', array_keys($result['node']));
+//            print_r($node); exit;
+            $node->field_current_balance['und'][0]['value'] = $balance;
+            field_attach_update('node', $node);
+//            node_save($node);
+        }
     }
 }
 
