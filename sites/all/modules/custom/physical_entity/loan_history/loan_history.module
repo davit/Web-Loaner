@@ -17,48 +17,48 @@ function loan_history_menu() {
  * hook_menu() callback
  */
 function loan_history_page() {
-    loan_history_calculate_current_balance();
+
 }
 
 function loan_history_crone() {
+
 
 }
 
 /**
  * select sum(amount) from actual_deposits where date <= today-1 and client_id
  * select sum(actual_total) from loan_history where rep_date <= today-1
+ * @param $client_id
+ * @return array
  */
 
-function loan_history_calculate_current_balance() {
+function loan_history_calculate_current_balance($client_id) {
 
     $query = new EntityFieldQuery();
 
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'actual_deposits')
-        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=');
+//        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=')
+        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
     $result = $query->execute();
 
     $actual_deposits = array();
     $physical_entities_with_issued_loans = loan_history_get_clients_with_issued_loans();
-    $field_amount_sum = array();
+    $field_amount_sum = 0;
 
     if (isset($result['node'])) {
         $actual_deposits = entity_load('node', array_keys($result['node']));
     }
 
     foreach($actual_deposits as $deposit) {
-        if (array_key_exists($deposit->field_physical_entity['und'][0]['target_id'], $field_amount_sum)) {
-            $field_amount_sum[$deposit->field_physical_entity['und'][0]['target_id']] += $deposit->field_amount['und'][0]['value'];
-        }
-        else {
-            $field_amount_sum[$deposit->field_physical_entity['und'][0]['target_id']] += $deposit->field_amount['und'][0]['value'];
-        }
+        $field_amount_sum += $deposit->field_amount['und'][0]['value'];
     }
 
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'loan_history')
-        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=');
+//        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=')
+        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
     $result = $query->execute();
 
@@ -69,14 +69,42 @@ function loan_history_calculate_current_balance() {
     }
 
     foreach ($loan_histories as $history) {
-        if (array_key_exists($history->field_physical_entity['und'][0]['target_id'], $field_amount_sum)) {
-            $field_amount_sum[$history->field_physical_entity['und'][0]['target_id']] -= $history->field_actual_total_amount['und'][0]['value'];
-        }
-        else {
-            $field_amount_sum[$history->field_physical_entity['und'][0]['target_id']] -= $history->field_actual_total_amount['und'][0]['value'];
-        }
+        $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
     }
 
+
+    loan_history_insert_balance($field_amount_sum, $client_id);
+}
+
+function loan_history_insert_balance($balance, $client_id) {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'current_balance')
+        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
+
+    $result = $query->execute();
+
+    if (empty($result)) {
+        $node = new stdClass();
+        $node->type = 'current_balance';
+        $node->title = $client_id;
+        node_object_prepare($node);
+
+        $node->language = LANGUAGE_NONE;
+
+        $node->field_physical_entity[$node->language][] = array(
+            'target_id' => $client_id,
+            'target_type' => 'node',
+        );
+
+        $node->field_current_balance[$node->language] = array(
+            0 => array('value' => $balance)
+        );
+
+        $node = node_submit($node);
+        node_save($node);
+    }
 }
 
 function loan_history_repayments_schedule($loan_id) {
@@ -121,10 +149,6 @@ function loan_history_repayments_schedule($loan_id) {
 
         $node->field_total_amount[$node->language] = array(
             0 => array('value' => $total_amount)
-        );
-
-        $node->field_actual_total_amount[$node->language] = array(
-            0 => array('value' => $principal_amount)
         );
 
         $node->field_interest_accrued[$node->language] = array(
