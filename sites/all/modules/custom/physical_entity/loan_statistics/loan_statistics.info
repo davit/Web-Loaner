@@ -1,0 +1,5 @@
+name = Loan Statistics
+description = A module gathering loan information for statistics
+package = Physical Entity
+core = 7.x
+

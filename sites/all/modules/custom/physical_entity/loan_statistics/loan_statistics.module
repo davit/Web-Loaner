@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Implements hook_menu
+ */
+function loan_statistics_menu()
+{
+    $items['loan-statistics'] = array(
+        'title' => '',
+        'page callback' => 'loan_statistics_page',
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function loan_statistics_page()
+{
+    loan_statistics_insert_issued_loan();
+}
+
+
+function loan_statistics_insert_issued_loan()
+{
+    $issued_loans = physical_entity_form_statement_get_issued_loans();
+
+    if (!empty($issued_loans)) {
+        foreach ($issued_loans as $loan) {
+            $node = new stdClass();
+            $node->type = 'loan_statistics';
+            $node->title = 'Loan Statistics';
+            node_object_prepare($node);
+
+            $node->language = LANGUAGE_NONE;
+
+            $node->field_issue_date[$node->language] = array(
+                0 => array('value' => $loan->field_issue_date['und'][0]['value'])
+            );
+
+            $node->field_issued_loans[$node->language] = array(
+                0 => array('value' => count($issued_loans))
+            );
+
+            $node = node_submit($node);
+            node_save($node);
+        }
+    }
+}
+
+
+
+/**
+ * Get Physical Entity by nid
+ *
+ * @param $nid
+ * @return array|bool|mixed
+ */
+function loan_statistics_create_get_loan_statistics_by_nid($nid)
+{
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'loan_statistics')
+        ->propertyCondition('nid', $nid);
+
+    $result = $query->execute();
+
+    $loan_statistics = array();
+
+    if (isset($result['node'])) {
+        $loan_statistics_ids = array_keys($result['node']);
+        $loan_statistics = node_load($loan_statistics_ids[0]);
+    }
+
+    return $loan_statistics;
+}

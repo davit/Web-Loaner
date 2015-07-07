@@ -12,7 +12,7 @@ class views_dataviz_plugin_display_extender_dataviz_bigtext extends views_plugin
   function pre_execute() {
     // Call the parent setup function so we do not lose data.
     parent::pre_execute();
-    if ($this->display->options['dataviz_load_bigtext']) {
+    if (isset($this->display->options['dataviz_load_bigtext']) && $this->display->options['dataviz_load_bigtext']) {
       drupal_add_js(drupal_get_path('module', 'views_dataviz') . '/js/dataviz-bigtext.js');
     }
   }

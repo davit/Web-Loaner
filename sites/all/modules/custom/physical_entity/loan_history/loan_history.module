@@ -17,6 +17,78 @@ function loan_history_menu() {
  * hook_menu() callback
  */
 function loan_history_page() {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'loan_history')
+        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
+
+    $result = $query->execute();
+
+    $statement_forms = array();
+
+    if (isset($result['node'])) {
+        $statement_forms = entity_load('node', array_keys($result['node']));
+    }
+
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'current_balance')
+        ->fieldCondition('field_physical_entity', 'target_id', 46, '=');
+
+    $result_balance = $query->execute();
+    $current_balance = array();
+
+    if (isset($result_balance['node'])) {
+        $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
+    }
+
+
+    foreach($statement_forms as $form) {
+        $client_id = $form->field_physical_entity['und'][0]['target_id'];
+
+        $query = new EntityFieldQuery();
+        $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', 'current_balance')
+            ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
+
+        $result_balance = $query->execute();
+        $current_balance = array();
+
+        if (isset($result_balance['node'])) {
+            $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
+        }
+
+        if ($current_balance->field_current_balance['und'][0]['value'] >= $form->field_total_amount['und'][0]['value']) {
+            if (!empty($entities['node'])) {
+                $node = node_load($form->nid);
+                $node->field_actual_date['und'][0]['value'] = $form->field_repayment_date['und'][0]['value'];
+                $node->field_actual_total_amount['und'][0]['value'] = $form->field_total_amount['und'][0]['value'];
+                $node->field_actual_interest['und'][0]['value'] = $form->field_interest_accrued['und'][0]['value'];
+                $node->field_actual_principal['und'][0]['value'] = $form->field_principal['und'][0]['value'];
+
+                // DO CURRENT BALANCE UPDATE AS WELL!! current_balance -= total_amount;
+
+                field_attach_update('node', $node);
+            }
+        }else {
+            $node = node_load($form->nid);
+//            $node->field_actual_interest['und'][0]['value'] = $form->field_principal['und'][0]['value'];
+            $node->field_actual_total_amount['und'][0]['value'] = $current_balance->field_current_balance['und'][0]['value'];
+            $node->field_balance['und'][0]['value'] = 0;
+            $node->field_overdue_accrued['und'][0]['value'] = ($node->field_total_amount['und'][0]['value'] -
+                    $node->field_actual_total_amount['und'][0]['value']) * 0.005;
+            $node->field_overdue_days['und'][0]['value'] = 1;
+            field_attach_update('node', $node);
+            /**
+             * ჯერ დაიფარება სარგებელი; რამდენიც დარჩება Principal დაიფარება.
+             * Actual Total = Current Balance
+             * Current Balance = 0
+             * field_overdue_accrued = (Total Amount - Actual Total) * 0.005
+             * overdue days = 1;
+             */
+        }
+    }
 
 }
 
@@ -113,10 +185,8 @@ function loan_history_insert_balance($balance, $client_id) {
 
         if (!empty($entities['node'])) {
             $node = node_load('node', array_keys($result['node']));
-//            print_r($node); exit;
             $node->field_current_balance['und'][0]['value'] = $balance;
             field_attach_update('node', $node);
-//            node_save($node);
         }
     }
 }
