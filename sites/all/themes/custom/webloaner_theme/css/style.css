@@ -149,3 +149,27 @@ table tr:hover td {
 .view .pdf-export-ajax {
     float: none;
 }
+
+/*** CONTENT BOXES ***/
+
+.content-box {
+    text-align: center;
+}
+
+.content-box.create-form .fa-pencil-square-o, .fa-list-alt{
+    color: #58a39f;
+}
+
+.content-box .fa-list {
+    /*color: #8BA4BA;*/
+}
+
+.content-box .fa-calculator {
+    color: #8fb859;
+}
+
+.content-box .fa-money, .content-box .fa-th-list {
+    color: #78665e;
+}
+/*** CONTENT BOXES END***/
+

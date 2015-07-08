@@ -40,6 +40,7 @@ function loan_statistics_insert_issued_loan() {
     }
   }
 
+
   foreach ($loan_statistics as $date_key => $statistic) {
     $node = new stdClass();
     $node->type = 'loan_statistics';
@@ -59,6 +60,10 @@ function loan_statistics_insert_issued_loan() {
     $node = node_submit($node);
     node_save($node);
   }
+
+}
+
+function loan_statistics_crone() {
 
 }
 
