@@ -75,6 +75,7 @@ function physical_entity_create_form($form, &$form_state)
         '#title' => t('Date of Birth'),
         '#date_label_position' => 'within',
         '#date_format' => 'Y-m-d',
+        '#date_year_range' => '-80:+80',
         '#default' => date('Y-m-d')
     );
 

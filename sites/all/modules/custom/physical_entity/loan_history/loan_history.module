@@ -4,91 +4,91 @@
  * Implements hook_menu
  */
 function loan_history_menu() {
-    $items['physical-entities/loan-history'] = array(
-        'title' => 'Create A Physical Entity',
-        'page callback' => 'loan_history_page',
-        'access callback' => TRUE,
-    );
+  $items['physical-entities/loan-history'] = array(
+    'title' => 'Create A Physical Entity',
+    'page callback' => 'loan_history_page',
+    'access callback' => TRUE,
+  );
 
-    return $items;
+  return $items;
 }
 
 /**
  * hook_menu() callback
  */
 function loan_history_page() {
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'loan_history')
+    ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
+
+  $result = $query->execute();
+
+  $statement_forms = array();
+
+  if (isset($result['node'])) {
+    $statement_forms = entity_load('node', array_keys($result['node']));
+  }
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'current_balance')
+    ->fieldCondition('field_physical_entity', 'target_id', 46, '=');
+
+  $result_balance = $query->execute();
+  $current_balance = array();
+
+  if (isset($result_balance['node'])) {
+    $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
+  }
+
+
+  foreach($statement_forms as $form) {
+    $client_id = $form->field_physical_entity['und'][0]['target_id'];
+
     $query = new EntityFieldQuery();
-
     $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'loan_history')
-        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
-
-    $result = $query->execute();
-
-    $statement_forms = array();
-
-    if (isset($result['node'])) {
-        $statement_forms = entity_load('node', array_keys($result['node']));
-    }
-
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'current_balance')
-        ->fieldCondition('field_physical_entity', 'target_id', 46, '=');
+      ->entityCondition('bundle', 'current_balance')
+      ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
     $result_balance = $query->execute();
     $current_balance = array();
 
     if (isset($result_balance['node'])) {
-        $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
+      $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
     }
 
+    if ($current_balance->field_current_balance['und'][0]['value'] >= $form->field_total_amount['und'][0]['value']) {
+      if (!empty($entities['node'])) {
+        $node = node_load($form->nid);
+        $node->field_actual_date['und'][0]['value'] = $form->field_repayment_date['und'][0]['value'];
+        $node->field_actual_total_amount['und'][0]['value'] = $form->field_total_amount['und'][0]['value'];
+        $node->field_actual_interest['und'][0]['value'] = $form->field_interest_accrued['und'][0]['value'];
+        $node->field_actual_principal['und'][0]['value'] = $form->field_principal['und'][0]['value'];
 
-    foreach($statement_forms as $form) {
-        $client_id = $form->field_physical_entity['und'][0]['target_id'];
+        // DO CURRENT BALANCE UPDATE AS WELL!! current_balance -= total_amount;
 
-        $query = new EntityFieldQuery();
-        $query->entityCondition('entity_type', 'node')
-            ->entityCondition('bundle', 'current_balance')
-            ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
-
-        $result_balance = $query->execute();
-        $current_balance = array();
-
-        if (isset($result_balance['node'])) {
-            $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
-        }
-
-        if ($current_balance->field_current_balance['und'][0]['value'] >= $form->field_total_amount['und'][0]['value']) {
-            if (!empty($entities['node'])) {
-                $node = node_load($form->nid);
-                $node->field_actual_date['und'][0]['value'] = $form->field_repayment_date['und'][0]['value'];
-                $node->field_actual_total_amount['und'][0]['value'] = $form->field_total_amount['und'][0]['value'];
-                $node->field_actual_interest['und'][0]['value'] = $form->field_interest_accrued['und'][0]['value'];
-                $node->field_actual_principal['und'][0]['value'] = $form->field_principal['und'][0]['value'];
-
-                // DO CURRENT BALANCE UPDATE AS WELL!! current_balance -= total_amount;
-
-                field_attach_update('node', $node);
-            }
-        }else {
-            $node = node_load($form->nid);
+        field_attach_update('node', $node);
+      }
+    }else {
+      $node = node_load($form->nid);
 //            $node->field_actual_interest['und'][0]['value'] = $form->field_principal['und'][0]['value'];
-            $node->field_actual_total_amount['und'][0]['value'] = $current_balance->field_current_balance['und'][0]['value'];
-            $node->field_balance['und'][0]['value'] = 0;
-            $node->field_overdue_accrued['und'][0]['value'] = ($node->field_total_amount['und'][0]['value'] -
-                    $node->field_actual_total_amount['und'][0]['value']) * 0.005;
-            $node->field_overdue_days['und'][0]['value'] = 1;
-            field_attach_update('node', $node);
-            /**
-             * ჯერ დაიფარება სარგებელი; რამდენიც დარჩება Principal დაიფარება.
-             * Actual Total = Current Balance
-             * Current Balance = 0
-             * field_overdue_accrued = (Total Amount - Actual Total) * 0.005
-             * overdue days = 1;
-             */
-        }
+      $node->field_actual_total_amount['und'][0]['value'] = $current_balance->field_current_balance['und'][0]['value'];
+      $node->field_balance['und'][0]['value'] = 0;
+      $node->field_overdue_accrued['und'][0]['value'] = ($node->field_total_amount['und'][0]['value'] -
+          $node->field_actual_total_amount['und'][0]['value']) * 0.005;
+      $node->field_overdue_days['und'][0]['value'] = 1;
+      field_attach_update('node', $node);
+      /**
+       * ჯერ დაიფარება სარგებელი; რამდენიც დარჩება Principal დაიფარება.
+       * Actual Total = Current Balance
+       * Current Balance = 0
+       * field_overdue_accrued = (Total Amount - Actual Total) * 0.005
+       * overdue days = 1;
+       */
     }
+  }
 
 }
 
@@ -105,95 +105,96 @@ function loan_history_crone() {
 
 function loan_history_calculate_current_balance($client_id) {
 
-    $query = new EntityFieldQuery();
+  $query = new EntityFieldQuery();
 
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'actual_deposits')
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'actual_deposits')
 //        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=')
-        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
+    ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
-    $result = $query->execute();
+  $result = $query->execute();
 
-    $actual_deposits = array();
-    $physical_entities_with_issued_loans = loan_history_get_clients_with_issued_loans();
-    $field_amount_sum = 0;
+  $actual_deposits = array();
+  $physical_entities_with_issued_loans = loan_history_get_clients_with_issued_loans();
+  $field_amount_sum = 0;
 
-    if (isset($result['node'])) {
-        $actual_deposits = entity_load('node', array_keys($result['node']));
-    }
+  if (isset($result['node'])) {
+    $actual_deposits = entity_load('node', array_keys($result['node']));
+  }
 
-    foreach($actual_deposits as $deposit) {
-        $field_amount_sum += $deposit->field_amount['und'][0]['value'];
-    }
+  foreach($actual_deposits as $deposit) {
+    $field_amount_sum += $deposit->field_amount['und'][0]['value'];
+  }
 
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'loan_history')
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'loan_history')
 //        ->fieldCondition('field_date', 'value', date('Y-m-d', strtotime('Yesterday')), '<=')
-        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
+    ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
-    $result = $query->execute();
+  $result = $query->execute();
 
-    $loan_histories =array();
+  $loan_histories =array();
 
-    if (isset($result['node'])) {
-        $loan_histories = entity_load('node', array_keys($result['node']));
+  if (isset($result['node'])) {
+    $loan_histories = entity_load('node', array_keys($result['node']));
+  }
+
+  foreach ($loan_histories as $history) {
+    if (isset($history->field_actual_total_amount)) {
+            $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
     }
-
-    foreach ($loan_histories as $history) {
-        if (isset($history->field_actual_total_amount)) {
-//            $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
-        }
-    }
+  }
 
 
-    loan_history_insert_balance($field_amount_sum, $client_id);
+  loan_history_insert_balance($field_amount_sum, $client_id);
 }
 
 function loan_history_insert_balance($balance, $client_id) {
-    $query = new EntityFieldQuery();
+  $query = new EntityFieldQuery();
 
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'current_balance')
-        ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'current_balance')
+    ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=');
 
-    $result = $query->execute();
+  $result = $query->execute();
 
-    if (empty($result)) {
-        $node = new stdClass();
-        $node->type = 'current_balance';
-        $node->title = $client_id;
-        node_object_prepare($node);
+  if (empty($result)) {
+    $node = new stdClass();
+    $node->type = 'current_balance';
+    $node->title = $client_id;
+    node_object_prepare($node);
 
-        $node->language = LANGUAGE_NONE;
+    $node->language = LANGUAGE_NONE;
 
-        $node->field_physical_entity[$node->language][] = array(
-            'target_id' => $client_id,
-            'target_type' => 'node',
-        );
+    $node->field_physical_entity[$node->language][] = array(
+      'target_id' => $client_id,
+      'target_type' => 'node',
+    );
 
-        $node->field_current_balance[$node->language] = array(
-            0 => array('value' => $balance)
-        );
+    $node->field_current_balance[$node->language] = array(
+      0 => array('value' => $balance)
+    );
 
-        $node = node_submit($node);
-        node_save($node);
-    }else {
-        $entities = $query->entityCondition('entity_type', 'node')
-            ->propertyCondition('type', 'current_balance')
-            ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=')
-            ->execute();
+    $node = node_submit($node);
+    node_save($node);
+  }else {
+    $entities = $query->entityCondition('entity_type', 'node')
+      ->propertyCondition('type', 'current_balance')
+      ->fieldCondition('field_physical_entity', 'target_id', $client_id, '=')
+      ->execute();
 
-        if (!empty($entities['node'])) {
-            $node = node_load('node', array_keys($result['node']));
-            $node->field_current_balance['und'][0]['value'] = $balance;
-            field_attach_update('node', $node);
-        }
+    if (!empty($entities['node'])) {
+      $node = node_load('node', array_keys($result['node']));
+      $node->field_current_balance['und'][0]['value'] = $balance;
+      field_attach_update('node', $node);
     }
+  }
 }
 
 function loan_history_repayments_schedule($loan_id) {
-    $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
+  $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
 
+  if (!empty($loan_statement)) {
     $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
     $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
     $annual_interest_rate = round($loan_statement->field_annual_interest_rate['und'][0]['value'], 2);
@@ -204,52 +205,53 @@ function loan_history_repayments_schedule($loan_id) {
 
     for ($n = 1; $n <= $number_of_periods; $n++) {
 
-        $node = new stdClass();
-        $node->type = 'loan_history';
-        $node->title = $loan_id;
-        node_object_prepare($node);
+      $node = new stdClass();
+      $node->type = 'loan_history';
+      $node->title = $loan_id;
+      node_object_prepare($node);
 
-        $node->language = LANGUAGE_NONE;
+      $node->language = LANGUAGE_NONE;
 
-        $issue_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
-        $interest = round(round($balance, 2) * $annual_interest_rate  * 0.01 / 12, 2);
-        $principal = round($total_amount - $interest, 2);
+      $issue_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
+      $interest = round(round($balance, 2) * $annual_interest_rate * 0.01 / 12, 2);
+      $principal = round($total_amount - $interest, 2);
 
-        $balance -= $principal;
+      $balance -= $principal;
 
-        $node->field_physical_entity[$node->language][] = array(
-            'target_id' => $loan_statement->field_physical_entity['und'][0]['target_id'],
-            'target_type' => 'node',
-        );
+      $node->field_physical_entity[$node->language][] = array(
+        'target_id' => $loan_statement->field_physical_entity['und'][0]['target_id'],
+        'target_type' => 'node',
+      );
 
-        $node->field_physical_entity_loan[$node->language][] = array(
-            'target_id' => $loan_id,
-            'target_type' => 'node',
-        );
+      $node->field_physical_entity_loan[$node->language][] = array(
+        'target_id' => $loan_id,
+        'target_type' => 'node',
+      );
 
-        $node->field_repayment_date[$node->language] = array(
-            0 => array('value' => $issue_date)
-        );
+      $node->field_repayment_date[$node->language] = array(
+        0 => array('value' => $issue_date)
+      );
 
-        $node->field_total_amount[$node->language] = array(
-            0 => array('value' => $total_amount)
-        );
+      $node->field_total_amount[$node->language] = array(
+        0 => array('value' => $total_amount)
+      );
 
-        $node->field_interest_accrued[$node->language] = array(
-            0 => array('value' => $interest)
-        );
+      $node->field_interest_accrued[$node->language] = array(
+        0 => array('value' => $interest)
+      );
 
-        $node->field_principal[$node->language] = array(
-            0 => array('value' => $principal)
-        );
+      $node->field_principal[$node->language] = array(
+        0 => array('value' => $principal)
+      );
 
-        $node->field_balance[$node->language] = array(
-            0 => array('value' => round($balance, 2))
-        );
+      $node->field_balance[$node->language] = array(
+        0 => array('value' => round($balance, 2))
+      );
 
-        $node = node_submit($node);
-        node_save($node);
+      $node = node_submit($node);
+      node_save($node);
     }
+  }
 }
 
 /**
@@ -266,11 +268,11 @@ function loan_history_update_loan_history($amount_sum) {
 
 function pmt($interestRate, $nper, $principal) {
 
-    $interestRate = $interestRate * 0.01 / 12;
+  $interestRate = $interestRate * 0.01 / 12;
 
-    $payment = $principal * $interestRate / (1 - pow((1 + $interestRate), -$nper));
+  $payment = $principal * $interestRate / (1 - pow((1 + $interestRate), -$nper));
 
-    return round($payment, 2); //Round to two decimal places
+  return round($payment, 2); //Round to two decimal places
 }
 
 /**
@@ -280,28 +282,28 @@ function pmt($interestRate, $nper, $principal) {
  */
 function loan_history_get_clients_with_issued_loans() {
 
-    $issued_status_id = physical_entity_form_statement_get_loan_status_id('Issued');
+  $issued_status_id = physical_entity_form_statement_get_loan_status_id('Issued');
 
-    $query = new EntityFieldQuery();
+  $query = new EntityFieldQuery();
 
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'physical_entity_loan')
-        ->fieldCondition('field_loan_status', 'target_id', $issued_status_id, '=');
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'physical_entity_loan')
+    ->fieldCondition('field_loan_status', 'target_id', $issued_status_id, '=');
 
-    $result = $query->execute();
+  $result = $query->execute();
 
-    $statement_forms = array();
-    $physical_entity_ids = array();
+  $statement_forms = array();
+  $physical_entity_ids = array();
 
-    if (isset($result['node'])) {
-        $statement_forms = entity_load('node', array_keys($result['node']));
-    }
+  if (isset($result['node'])) {
+    $statement_forms = entity_load('node', array_keys($result['node']));
+  }
 
-    foreach ($statement_forms as $key => $form) {
-        $physical_entity_ids[$key] = $form->field_physical_entity['und'][0]['target_id'];
-    }
+  foreach ($statement_forms as $key => $form) {
+    $physical_entity_ids[$key] = $form->field_physical_entity['und'][0]['target_id'];
+  }
 
-    return $physical_entity_ids;
+  return $physical_entity_ids;
 
 }
 
