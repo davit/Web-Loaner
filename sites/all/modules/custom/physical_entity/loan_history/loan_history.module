@@ -198,7 +198,7 @@ function loan_history_repayments_schedule($loan_id) {
     $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
     $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
     $annual_interest_rate = round($loan_statement->field_annual_interest_rate['und'][0]['value'], 2);
-    $issue_date = date('Y-m-d', strtotime($loan_statement->field_issue_date['und'][0]['value']));
+
 
     $total_amount = pmt($annual_interest_rate, $number_of_periods, $principal_amount);
     $balance = $principal_amount;
@@ -212,7 +212,7 @@ function loan_history_repayments_schedule($loan_id) {
 
       $node->language = LANGUAGE_NONE;
 
-      $issue_date = date("Y-m-d", strtotime("+1 month", strtotime($issue_date)));
+      $repayment_date = date("Y-m-d", strtotime("+1 month", strtotime('Today')));
       $interest = round(round($balance, 2) * $annual_interest_rate * 0.01 / 12, 2);
       $principal = round($total_amount - $interest, 2);
 
@@ -229,7 +229,7 @@ function loan_history_repayments_schedule($loan_id) {
       );
 
       $node->field_repayment_date[$node->language] = array(
-        0 => array('value' => $issue_date)
+        0 => array('value' => $repayment_date)
       );
 
       $node->field_total_amount[$node->language] = array(

@@ -181,7 +181,7 @@
         <div class="col-lg-3">
           <div class="content-box create-form">
             <div class="description">
-              <h3>Create Loan</h3>
+              <h3>Create Statement Form</h3>
             </div>
             <a href="physical-entities/form-statements/create">
               <i class="fa fa-pencil-square-o fa-5x" ></i>
@@ -192,7 +192,7 @@
         <div class="col-lg-3">
           <div class="content-box list-forms">
             <div class="description">
-              <h3>List Forms</h3>
+              <h3>List Statement Forms</h3>
             </div>
             <a href="physical-entities/form-statements">
               <i class="fa fa-list-alt fa-5x" ></i>
