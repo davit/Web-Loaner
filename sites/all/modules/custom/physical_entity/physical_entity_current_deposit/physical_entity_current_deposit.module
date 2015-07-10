@@ -98,7 +98,7 @@ function physical_entity_current_deposit_form($form, &$form_state)
         '#title' => t('Date'),
         '#date_label_position' => 'within',
         '#date_format' => 'Y-m-d',
-        '#default' => date('Y-m-d')
+        '#default_value' => date('Y-m-d')
     );
 
     $form['submit'] = array(
@@ -146,6 +146,7 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
 
     $node = node_submit($node);
     node_save($node);
+
 
     loan_history_calculate_current_balance($physical_entity_nid);
 
