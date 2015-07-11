@@ -5,7 +5,7 @@
  */
 function loan_statistics_menu()
 {
-    $items['statistics/issued-loans'] = array(
+    $items['statistics/update'] = array(
         'title' => '',
         'page callback' => 'loan_statistics_page',
         'access callback' => TRUE,
@@ -28,7 +28,7 @@ function loan_statistics_page()
 function loan_statistics_insert_issued_loan() {
     $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d'));
     $loan_statistics = array();
-
+    
     $issue_date = '';
     $issued_loans = 0;
     $total_amount_issued = 0;

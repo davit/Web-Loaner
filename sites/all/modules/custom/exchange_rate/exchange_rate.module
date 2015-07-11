@@ -42,7 +42,7 @@ function exchange_rate_parser()
     if (!empty($currencyTable)) {
         $dom->loadHTML($currencyTable);
         $tds = $dom->getElementsByTagName("td");
-        $pubDateFormatted = date('Y-m-d H:i', strtotime(strtotime(date('Y-m-d H:i'), "Tomorrow")));
+        $pubDateFormatted = date('Y-m-d H:i', strtotime("+1 Day", strtotime($pubDate)));
 
         $usd_id = exchange_rate_get_currency_by_name("USD")->nid;
 
