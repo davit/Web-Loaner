@@ -5,13 +5,13 @@
  */
 function loan_statistics_menu()
 {
-  $items['statistics'] = array(
-    'title' => '',
-    'page callback' => 'loan_statistics_page',
-    'access callback' => TRUE,
-  );
+    $items['statistics/issued-loans'] = array(
+        'title' => '',
+        'page callback' => 'loan_statistics_page',
+        'access callback' => TRUE,
+    );
 
-  return $items;
+    return $items;
 }
 
 /**
@@ -21,27 +21,27 @@ function loan_statistics_menu()
  */
 function loan_statistics_page()
 {
-  loan_statistics_insert_issued_loan();
+    loan_statistics_insert_issued_loan();
 }
 
 
 function loan_statistics_insert_issued_loan() {
-  $issued_loans = physical_entity_form_statement_get_issued_loans();
-  $loan_statistics = array();
+    $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d'));
+    $loan_statistics = array();
 
-  if (!empty($issued_loans)) {
-    foreach ($issued_loans as $loan) {
-      $issue_date = date('Y-m-d', strtotime($loan->field_issue_date['und'][0]['value']));
-      $loan_statistics[$issue_date] = 0;
+    $issue_date = '';
+    $issued_loans = 0;
+    $total_amount_issued = 0;
+
+    foreach ($issued_loans_today as $loan) {
+        $issue_date = $loan->field_issue_date['und'][0]['value'];
+        $issued_loans += 1;
+        $total_amount_issued += $loan->field_principal_amount['und'][0]['value'];
     }
-    foreach ($issued_loans as $loan) {
-      $issue_date = date('Y-m-d', strtotime($loan->field_issue_date['und'][0]['value']));
-      $loan_statistics[$issue_date] += 1;
-    }
-  }
 
 
-  foreach ($loan_statistics as $date_key => $statistic) {
+//    print  $issued_loans . " ".$total_amount_issued; exit;
+
     $node = new stdClass();
     $node->type = 'loan_statistics';
     $node->title = 'Loan Statistics';
@@ -50,16 +50,19 @@ function loan_statistics_insert_issued_loan() {
     $node->language = LANGUAGE_NONE;
 
     $node->field_issue_date[$node->language] = array(
-      0 => array('value' => $date_key)
+        0 => array('value' => $issue_date)
     );
 
     $node->field_issued_loans[$node->language] = array(
-      0 => array('value' => $statistic)
+        0 => array('value' => $issued_loans)
+    );
+
+    $node->field_total_amount_issued[$node->language] = array(
+        0 => array('value' => $total_amount_issued)
     );
 
     $node = node_submit($node);
     node_save($node);
-  }
 
 }
 
@@ -75,20 +78,20 @@ function loan_statistics_crone() {
  */
 function loan_statistics_create_get_loan_statistics_by_nid($nid)
 {
-  $query = new EntityFieldQuery();
+    $query = new EntityFieldQuery();
 
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'loan_statistics')
-    ->propertyCondition('nid', $nid);
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'loan_statistics')
+        ->propertyCondition('nid', $nid);
 
-  $result = $query->execute();
+    $result = $query->execute();
 
-  $loan_statistics = array();
+    $loan_statistics = array();
 
-  if (isset($result['node'])) {
-    $loan_statistics_ids = array_keys($result['node']);
-    $loan_statistics = node_load($loan_statistics_ids[0]);
-  }
+    if (isset($result['node'])) {
+        $loan_statistics_ids = array_keys($result['node']);
+        $loan_statistics = node_load($loan_statistics_ids[0]);
+    }
 
-  return $loan_statistics;
+    return $loan_statistics;
 }

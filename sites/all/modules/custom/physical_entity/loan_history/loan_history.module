@@ -142,7 +142,7 @@ function loan_history_calculate_current_balance($client_id) {
 
 
     foreach ($loan_histories as $history) {
-        if (isset($history->field_actual_total_amount)) {
+        if (isset($history->field_actual_total_amount) && !empty($history->field_actual_total_amount)) {
             $field_amount_sum -= $history->field_actual_total_amount['und'][0]['value'];
         }
     }
@@ -200,9 +200,9 @@ function loan_history_repayments_schedule($loan_id) {
         $principal_amount = $loan_statement->field_principal_amount['und'][0]['value'];
         $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
         $annual_interest_rate = round($loan_statement->field_annual_interest_rate['und'][0]['value'], 2);
-
-
-        $total_amount = pmt($annual_interest_rate, $number_of_periods, $principal_amount);
+        $grace_period = $loan_statement->field_grace_period['und'][0]['value'];
+    
+        $total_amount = pmt($annual_interest_rate, $number_of_periods - $grace_period, $principal_amount);
         $balance = $principal_amount;
 
         for ($n = 1; $n <= $number_of_periods; $n++) {
@@ -214,9 +214,15 @@ function loan_history_repayments_schedule($loan_id) {
 
             $node->language = LANGUAGE_NONE;
 
+
             $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime('Tomorrow')));
             $interest = round(round($balance, 2) * $annual_interest_rate * 0.01 / 12, 2);
-            $principal = round($total_amount - $interest, 2);
+
+            if ($n > $grace_period) {
+                $principal = round($total_amount - $interest, 2);
+            }else {
+                $principal = 0;
+            }
 
             $balance -= $principal;
 

@@ -1,0 +1,98 @@
+<?php
+
+
+/**
+ * Implements hook_menu().
+ */
+function exchange_rate_menu() {
+    $items['exchange-rate'] = array(
+        'title' => '',
+        'page callback' => 'exchange_rate_page',
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+
+/**
+ * hook_menu() callback
+ *
+ * @return string
+ */
+function exchange_rate_page() {
+    exchange_rate_parser();
+}
+
+function exchange_rate_parser()
+{
+    $exchange_rate_rss = 'http://www.nbg.ge/rss.php';
+
+    $dom = new DOMDocument();
+    $dom->load($exchange_rate_rss);
+
+    $currencyTable = '';
+    $pubDate = '';
+
+    foreach ($dom->getElementsByTagName('item') as $node) {
+        $currencyTable = $node->getElementsByTagName('description')->item(0)->nodeValue;
+        $pubDate = $node->getElementsByTagName('pubDate')->item(0)->nodeValue;
+    }
+
+
+    if (!empty($currencyTable)) {
+        $dom->loadHTML($currencyTable);
+        $tds = $dom->getElementsByTagName("td");
+        $pubDateFormatted = date('Y-m-d H:i', strtotime(strtotime(date('Y-m-d H:i'), "Tomorrow")));
+
+        $usd_id = exchange_rate_get_currency_by_name("USD")->nid;
+
+        for ($n = 0; $n < $tds->length; $n++) {
+
+            if ($tds->item($n)->nodeValue == 'USD') {
+                $node = new stdClass();
+                $node->type = 'exchange_rates';
+                $node->title = $pubDateFormatted;
+                node_object_prepare($node);
+                $node->language = LANGUAGE_NONE;
+
+                $node->field_currency_id[$node->language][] = array(
+                    'target_id' => $usd_id,
+                    'target_type' => 'node',
+                );
+
+                $node->field_rate[$node->language] = array(
+                    0 => array('value' => $tds->item($n + 2)->nodeValue)
+                );
+
+                $node->field_rate_date[$node->language] = array(
+                    0 => array('value' => $pubDateFormatted)
+                );
+
+                $node = node_submit($node);
+                node_save($node);
+
+                break;
+            }
+        }
+    }
+
+}
+
+
+function exchange_rate_get_currency_by_name($currency_name) {
+        $query = new EntityFieldQuery();
+
+        $query->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', 'currency')
+            ->fieldCondition('field_currency', 'value', $currency_name, '=');
+        $result = $query->execute();
+
+        $currency = array();
+
+        if (isset($result['node'])) {
+            $currency = entity_load('node', array_keys($result['node']));
+        }
+
+        return current($currency);
+}
+

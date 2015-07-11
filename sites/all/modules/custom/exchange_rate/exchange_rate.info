@@ -1,0 +1,6 @@
+name = exchange_rate
+description = For official currency conversions
+package = misc
+core = 7.x
+
+
