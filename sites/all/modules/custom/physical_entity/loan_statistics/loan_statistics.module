@@ -26,21 +26,26 @@ function loan_statistics_page()
 
 
 function loan_statistics_insert_issued_loan() {
-    $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d'));
-    $loan_statistics = array();
-    
+    $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d', strtotime("tomorrow")));
+
     $issue_date = '';
     $issued_loans = 0;
     $total_amount_issued = 0;
 
     foreach ($issued_loans_today as $loan) {
         $issue_date = $loan->field_issue_date['und'][0]['value'];
-        $issued_loans += 1;
-        $total_amount_issued += $loan->field_principal_amount['und'][0]['value'];
+        $currency = $loan->field_currency['und'][0]['value'];
+
+        if ($currency != 'GEL') {
+            $currency_id = exchange_rate_get_currency_by_name($currency)->nid;
+            $exchange_rate_obj = exchange_rate_get_rate_by_currency_and_date($currency_id, $issue_date);
+            $exchange_rate = $exchange_rate_obj->field_rate['und'][0]['value'];
+            $total_amount_issued += $loan->field_principal_amount['und'][0]['value'] * $exchange_rate;
+        }else {
+            $total_amount_issued += $loan->field_principal_amount['und'][0]['value'];
+        }
+
     }
-
-
-//    print  $issued_loans . " ".$total_amount_issued; exit;
 
     $node = new stdClass();
     $node->type = 'loan_statistics';
@@ -54,7 +59,7 @@ function loan_statistics_insert_issued_loan() {
     );
 
     $node->field_issued_loans[$node->language] = array(
-        0 => array('value' => $issued_loans)
+        0 => array('value' => count($issued_loans_today))
     );
 
     $node->field_total_amount_issued[$node->language] = array(

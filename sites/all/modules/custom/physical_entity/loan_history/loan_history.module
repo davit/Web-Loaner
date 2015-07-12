@@ -6,7 +6,7 @@
 function loan_history_menu() {
     $items['physical-entities/update-loan-history'] = array(
         'title' => 'Create A Physical Entity',
-        'page callback' => 'loan_history_page',
+        'page callback' => 'loan_history_update',
         'access callback' => TRUE,
     );
 
@@ -16,37 +16,24 @@ function loan_history_menu() {
 /**
  * hook_menu() callback
  */
-function loan_history_page() {
+function loan_history_update() {
     $query = new EntityFieldQuery();
 
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'loan_history')
-        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('+1 month')), '=');
+        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
 
     $result = $query->execute();
 
-    $statement_forms = array();
+    $loan_history = array();
 
     if (isset($result['node'])) {
-        $statement_forms = entity_load('node', array_keys($result['node']));
+        $loan_history = entity_load('node', array_keys($result['node']));
     }
 
 
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'current_balance')
-        ->fieldCondition('field_physical_entity', 'target_id', 867, '=');
-
-    $result_balance = $query->execute();
-    $current_balance = array();
-
-    if (isset($result_balance['node'])) {
-        $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
-    }
-
-
-    foreach($statement_forms as $form) {
-        $client_id = $form->field_physical_entity['und'][0]['target_id'];
+    foreach($loan_history as $history) {
+        $client_id = $history->field_physical_entity['und'][0]['target_id'];
 
         $query = new EntityFieldQuery();
         $query->entityCondition('entity_type', 'node')
@@ -55,45 +42,79 @@ function loan_history_page() {
 
         $result_balance = $query->execute();
         $current_balance = array();
+        $cur_bal = 0;
 
         if (isset($result_balance['node'])) {
             $current_balance = current(entity_load('node', array_keys($result_balance['node'])));
+
         }
 
-        if ($current_balance->field_current_balance['und'][0]['value'] >= $form->field_total_amount['und'][0]['value']) {
-            if (!empty($entities['node'])) {
-                $node = node_load($form->nid);
-                $node->field_actual_date['und'][0]['value'] = $form->field_repayment_date['und'][0]['value'];
-                $node->field_actual_total_amount['und'][0]['value'] = $form->field_total_amount['und'][0]['value'];
-                $node->field_actual_interest['und'][0]['value'] = $form->field_interest_accrued['und'][0]['value'];
-                $node->field_actual_principal['und'][0]['value'] = $form->field_principal['und'][0]['value'];
+        if (!empty($current_balance)) {
+            $cur_bal = $current_balance->field_current_balance['und'][0]['value'];
+        }
 
-                // DO CURRENT BALANCE UPDATE AS WELL!! current_balance -= total_amount;
+        $node = node_load($history->nid);
+        $balance_node = node_load($current_balance->nid);
 
-                field_attach_update('node', $node);
+        if ($cur_bal >= $history->field_total_amount['und'][0]['value']) {
+
+            $node->field_actual_date['und'][0]['value'] = $history->field_repayment_date['und'][0]['value'];
+            $node->field_actual_total_amount['und'][0]['value'] = $history->field_total_amount['und'][0]['value'];
+            $node->field_actual_interest['und'][0]['value'] = $history->field_interest_accrued['und'][0]['value'];
+            $node->field_actual_principal['und'][0]['value'] = $history->field_principal['und'][0]['value'];
+
+            $balance_node->field_current_balance['und'][0]['value'] -= $node->field_actual_total_amount['und'][0]['value'];
+
+        }else if ($cur_bal > 0) {
+
+            $node->field_actual_date['und'][0]['value'] = $history->field_repayment_date['und'][0]['value'];
+
+//            if (!empty($node->field_overdue_accrued) &&
+//                $node->field_overdue_accrued['und'][0]['value'] > 0 &&
+//                $cur_bal >= $node->field_overdue_accrued['und'][0]['value']) {
+//                $node->field_overdue_paid['und'][0]['value'] = $node->field_overdue_accrued['und'][0]['value'];
+//            }else {
+//                $node->field_overdue_paid['und'][0]['value'] = $cur_bal;
+//            }
+
+            if ($cur_bal >= $node->field_interest_accrued['und'][0]['value']) {
+                $node->field_actual_interest['und'][0]['value'] = $node->field_interest_accrued['und'][0]['value'];
+            }else {
+                $node->field_actual_interest['und'][0]['value'] = $cur_bal;
             }
-        }else {
-            $node = node_load($form->nid);
-//            $node->field_actual_interest['und'][0]['value'] = $form->field_principal['und'][0]['value'];
-            $node->field_actual_total_amount['und'][0]['value'] = $current_balance->field_current_balance['und'][0]['value'];
-            $node->field_balance['und'][0]['value'] = 0;
-            $node->field_overdue_accrued['und'][0]['value'] = ($node->field_total_amount['und'][0]['value'] -
-                    $node->field_actual_total_amount['und'][0]['value']) * 0.005;
-            $node->field_overdue_days['und'][0]['value'] = 1;
-            field_attach_update('node', $node);
-            /**
-             * ჯერ დაიფარება სარგებელი; რამდენიც დარჩება Principal დაიფარება.
-             * Actual Total = Current Balance
-             * Current Balance = 0
-             * field_overdue_accrued = (Total Amount - Actual Total) * 0.005
-             * overdue days = 1;
-             */
+
+            $cur_bal -= $node->field_actual_interest['und'][0]['value'];
+
+
+            if ($cur_bal >= $node->field_principal['und'][0]['value']) {
+                $node->field_actual_principal['und'][0]['value'] = $node->field_principal['und'][0]['value'];
+            }else {
+                $node->field_actual_principal['und'][0]['value'] = $cur_bal;
+            }
+
+            $cur_bal = 0;
+
+
+            $node->field_actual_total_amount['und'][0]['value'] =
+                $node->field_actual_interest['und'][0]['value'] +
+                $node->field_actual_principal['und'][0]['value'];
+
+
+            $balance_node->field_current_balance['und'][0]['value'] = $cur_bal;
+
         }
+
+        $node->field_overdue_accrued['und'][0]['value'] = $node->field_total_amount['und'][0]['value']  -
+        $node->field_actual_total_amount['und'][0]['value'];
+
+        if ($node->field_overdue_accrued['und'][0]['value'] > 0) {
+            $node->field_overdue_days['und'][0]['value'] = 1;
+        }
+
+        field_attach_update('node', $node);
+        field_attach_update('node', $balance_node);
+
     }
-
-}
-
-function loan_history_crone() {
 
 }
 
@@ -193,7 +214,7 @@ function loan_history_insert_balance($balance, $client_id) {
     }
 }
 
-function loan_history_repayments_schedule($loan_id) {
+function loan_history_repayments_schedule($loan_id, $issue_date) {
     $loan_statement = current(physical_entity_form_statement_get_statement_form_by_nid($loan_id));
 
     if (!empty($loan_statement)) {
@@ -201,7 +222,7 @@ function loan_history_repayments_schedule($loan_id) {
         $number_of_periods = $loan_statement->field_number_of_periods['und'][0]['value'];
         $annual_interest_rate = round($loan_statement->field_annual_interest_rate['und'][0]['value'], 2);
         $grace_period = $loan_statement->field_grace_period['und'][0]['value'];
-    
+
         $total_amount = pmt($annual_interest_rate, $number_of_periods - $grace_period, $principal_amount);
         $balance = $principal_amount;
 
@@ -214,8 +235,7 @@ function loan_history_repayments_schedule($loan_id) {
 
             $node->language = LANGUAGE_NONE;
 
-
-            $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime('Tomorrow')));
+            $repayment_date = date("Y-m-d", strtotime("+$n month", strtotime($issue_date)));
             $interest = round(round($balance, 2) * $annual_interest_rate * 0.01 / 12, 2);
 
             if ($n > $grace_period) {
@@ -260,13 +280,6 @@ function loan_history_repayments_schedule($loan_id) {
             node_save($node);
         }
     }
-}
-
-/**
- * Implements hook_cron().
- */
-function loan_history_cron() {
-
 }
 
 

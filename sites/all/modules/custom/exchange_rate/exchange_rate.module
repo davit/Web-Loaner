@@ -78,21 +78,42 @@ function exchange_rate_parser()
 
 }
 
-
+/**
+ * @param $currency_name
+ * @return mixed
+ */
 function exchange_rate_get_currency_by_name($currency_name) {
-        $query = new EntityFieldQuery();
+    $query = new EntityFieldQuery();
 
-        $query->entityCondition('entity_type', 'node')
-            ->entityCondition('bundle', 'currency')
-            ->fieldCondition('field_currency', 'value', $currency_name, '=');
-        $result = $query->execute();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'currency')
+        ->fieldCondition('field_currency', 'value', $currency_name, '=');
+    $result = $query->execute();
 
-        $currency = array();
+    $currency = array();
 
-        if (isset($result['node'])) {
-            $currency = entity_load('node', array_keys($result['node']));
-        }
+    if (isset($result['node'])) {
+        $currency = entity_load('node', array_keys($result['node']));
+    }
 
-        return current($currency);
+    return current($currency);
 }
 
+function exchange_rate_get_rate_by_currency_and_date($currency_id, $date) {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'exchange_rates')
+        ->fieldCondition('field_currency_id', 'target_id', $currency_id, '=')
+        ->fieldCondition('field_rate_date', 'value', date('Y-m-d', strtotime($date)), 'CONTAINS');
+
+    $result = $query->execute();
+
+    $rate = array();
+
+    if (isset($result['node'])) {
+        $rate = entity_load('node', array_keys($result['node']));
+    }
+
+    return current($rate);
+}
