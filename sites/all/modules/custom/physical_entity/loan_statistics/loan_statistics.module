@@ -5,13 +5,13 @@
  */
 function loan_statistics_menu()
 {
-    $items['statistics/update'] = array(
-        'title' => '',
-        'page callback' => 'loan_statistics_page',
-        'access callback' => TRUE,
-    );
+  $items['statistics/update'] = array(
+    'title' => '',
+    'page callback' => 'loan_statistics_page',
+    'access callback' => TRUE,
+  );
 
-    return $items;
+  return $items;
 }
 
 /**
@@ -21,53 +21,64 @@ function loan_statistics_menu()
  */
 function loan_statistics_page()
 {
-    loan_statistics_insert_issued_loan();
+  loan_statistics_insert_issued_loan();
 }
 
 
 function loan_statistics_insert_issued_loan() {
-    $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d', strtotime("tomorrow")));
+  $issued_loans_today = physical_entity_form_statement_get_issued_loans_by_date(date('Y-m-d'));
 
-    $issue_date = '';
-    $issued_loans = 0;
-    $total_amount_issued = 0;
+//    print_r($issued_loans_today); exit;
 
-    foreach ($issued_loans_today as $loan) {
-        $issue_date = $loan->field_issue_date['und'][0]['value'];
-        $currency = $loan->field_currency['und'][0]['value'];
+  $issue_date = '';
+  $total_amount_issued = 0;
+  $currency = '';
+  $exchange_rate = 0;
 
-        if ($currency != 'GEL') {
-            $currency_id = exchange_rate_get_currency_by_name($currency)->nid;
-            $exchange_rate_obj = exchange_rate_get_rate_by_currency_and_date($currency_id, $issue_date);
-            $exchange_rate = $exchange_rate_obj->field_rate['und'][0]['value'];
-            $total_amount_issued += $loan->field_principal_amount['und'][0]['value'] * $exchange_rate;
-        }else {
-            $total_amount_issued += $loan->field_principal_amount['und'][0]['value'];
-        }
+  foreach ($issued_loans_today as $loan) {
+    $issue_date = $loan->field_issue_date['und'][0]['value'];
+    $currency = $loan->field_currency['und'][0]['value'];
 
+    if ($currency != 'GEL') {
+      $currency_id = exchange_rate_get_currency_by_name($currency)->nid;
+      $exchange_rate_obj = exchange_rate_get_rate_by_currency_and_date($currency_id, $issue_date);
+      $exchange_rate = $exchange_rate_obj->field_rate['und'][0]['value'];
+      $total_amount_issued += $loan->field_principal_amount['und'][0]['value'] * $exchange_rate;
+    }else {
+      $total_amount_issued += $loan->field_principal_amount['und'][0]['value'];
     }
 
-    $node = new stdClass();
-    $node->type = 'loan_statistics';
-    $node->title = 'Loan Statistics';
-    node_object_prepare($node);
+  }
 
-    $node->language = LANGUAGE_NONE;
+  $node = new stdClass();
+  $node->type = 'loan_statistics';
+  $node->title = 'Loan Statistics';
+  node_object_prepare($node);
 
-    $node->field_issue_date[$node->language] = array(
-        0 => array('value' => $issue_date)
-    );
+  $node->language = LANGUAGE_NONE;
 
-    $node->field_issued_loans[$node->language] = array(
-        0 => array('value' => count($issued_loans_today))
-    );
+  $node->field_issue_date[$node->language] = array(
+    0 => array('value' => $issue_date)
+  );
 
-    $node->field_total_amount_issued[$node->language] = array(
-        0 => array('value' => $total_amount_issued)
-    );
+  $node->field_issued_loans[$node->language] = array(
+    0 => array('value' => count($issued_loans_today))
+  );
 
-    $node = node_submit($node);
-    node_save($node);
+  $node->field_total_amount_issued[$node->language] = array(
+    0 => array('value' => $total_amount_issued)
+  );
+
+  $node->field_exchange_rate[$node->language] = array(
+    0 => array('value' => $exchange_rate)
+  );
+
+  $node->field_currency[$node->language] = array(
+    0 => array('value' => $currency)
+  );
+
+  $node = node_submit($node);
+  node_save($node);
 
 }
 
@@ -83,20 +94,20 @@ function loan_statistics_crone() {
  */
 function loan_statistics_create_get_loan_statistics_by_nid($nid)
 {
-    $query = new EntityFieldQuery();
+  $query = new EntityFieldQuery();
 
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'loan_statistics')
-        ->propertyCondition('nid', $nid);
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'loan_statistics')
+    ->propertyCondition('nid', $nid);
 
-    $result = $query->execute();
+  $result = $query->execute();
 
-    $loan_statistics = array();
+  $loan_statistics = array();
 
-    if (isset($result['node'])) {
-        $loan_statistics_ids = array_keys($result['node']);
-        $loan_statistics = node_load($loan_statistics_ids[0]);
-    }
+  if (isset($result['node'])) {
+    $loan_statistics_ids = array_keys($result['node']);
+    $loan_statistics = node_load($loan_statistics_ids[0]);
+  }
 
-    return $loan_statistics;
+  return $loan_statistics;
 }
