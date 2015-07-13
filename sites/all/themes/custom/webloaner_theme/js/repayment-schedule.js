@@ -6,13 +6,14 @@ jQuery(document).ready(function ($) {
     var monthRows = $('.field-name-field-number-of-periods .field-item');
     var gracePeriod = $('.field-name-field-grace-period .field-item');
     var issueDate = $('.field-name-field-issue-date .field-item').find('span').attr('content');
+    var issueDateFormatted = '';
 
-    issueDate = new Date(issueDate);
-    issueDate.setDate(issueDate.getDate() + 1);
-    issueDate.setMonth(issueDate.getMonth() + 1);
-
-    var issueDateFormatted = issueDate.toJSON().slice(0,10);
-
+    if (typeof issueDate !== 'undefined') {
+        issueDate = new Date(issueDate);
+        issueDate.setDate(issueDate.getDate() + 1);
+        issueDate.setMonth(issueDate.getMonth() + 1);
+        issueDateFormatted = issueDate.toJSON().slice(0,10);
+    }
 
     var tbody = loanTable.find('tbody');
     var tfoot = loanTable.find('tfoot');
@@ -57,6 +58,8 @@ jQuery(document).ready(function ($) {
                 interestSum += parseFloat(interest);
                 principalSum += parseFloat(principal);
 
+
+
                 tbody.append('<tr><td>' + issueDateFormatted + '</td><td>'
                 + totalPayment + '</td><td>'
                 + interest + '</td><td>'
@@ -78,8 +81,10 @@ jQuery(document).ready(function ($) {
                     balance = parseFloat(balance - principal);
                 }
 
-                issueDate.setMonth(issueDate.getMonth() + 1);
-                issueDateFormatted = issueDate.toJSON().slice(0,10);
+                if (typeof issueDate !== 'undefined') {
+                    issueDate.setMonth(issueDate.getMonth() + 1);
+                    issueDateFormatted = issueDate.toJSON().slice(0, 10);
+                }
             }
 
             tfoot.append('<tr><th class="loan-total"></th><th>' +

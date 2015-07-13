@@ -21,8 +21,8 @@ function loan_history_update() {
 
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'loan_history')
-//        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
-        ->fieldCondition('field_repayment_date', 'value', '2015-10-12', '=');
+        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
+//        ->fieldCondition('field_repayment_date', 'value', '2015-10-12', '=');
 
     $result = $query->execute();
 
