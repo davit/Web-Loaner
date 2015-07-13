@@ -1,49 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ca99f963-ad20-46d6-9bf1-885a29eda1e5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/README.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/README.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_views/README.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.admin.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.api.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.charts.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.forms.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.install" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/analytics_dashboard/analytics_dashboard.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools.api.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_example/google_chart_tools_example.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_example/google_chart_tools_example.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_views/google_chart_tools_views.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_views/google_chart_tools_views.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_views/views/google_chart_tools_views.views.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/google_chart_tools_views/views/google_chart_tools_views_plugin_style.inc" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/1643568-views_dataviz.patch" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/js/dataviz-bigtext.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/js/dataviz-goo-chart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz.api.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz.views.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz_plugin_display_extender_dataviz_bigtext.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/views_dataviz_plugin_style_dataviz.inc" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/sites/all/modules/contrib/views_dataviz/LICENSE.txt" afterPath="$PROJECT_DIR$/sites/all/modules/contrib/google_chart_tools/LICENSE.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/node--physical_entity_loan.tpl.php" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/node--physical_entity_loan.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/public_html.iml" afterPath="$PROJECT_DIR$/.idea/public_html.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/js/repayment-schedule.js" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/js/repayment-schedule.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/css/style.css" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webloaner.sql" afterPath="$PROJECT_DIR$/webloaner.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="ca99f963-ad20-46d6-9bf1-885a29eda1e5" name="Default" comment="" />
     <ignored path="public_html.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -73,7 +31,7 @@
       <file leaf-file-name="physical_entity_current_deposit.module" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.481482" vertical-offset="2363" max-vertical-offset="3510">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2363" max-vertical-offset="3510">
               <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
               <folding />
             </state>
@@ -90,20 +48,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="loan_statistics.module" pinned="false" current-in-tab="true">
+      <file leaf-file-name="loan_statistics.module" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.03257329" vertical-offset="592" max-vertical-offset="2142">
+            <state vertical-scroll-proportion="-0.7407407" vertical-offset="592" max-vertical-offset="2142">
               <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exchange_rate.module" pinned="false" current-in-tab="false">
+      <file leaf-file-name="exchange_rate.module" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="2250">
+            <state vertical-scroll-proportion="-0.4397394" vertical-offset="540" max-vertical-offset="2250">
               <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
@@ -160,6 +118,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -576,17 +535,20 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="ca99f963-ad20-46d6-9bf1-885a29eda1e5" name="Default" comment="" />
@@ -598,7 +560,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -612,13 +574,13 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -660,6 +622,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2142">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="2250">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2363" max-vertical-offset="3510">
+          <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="77" max-vertical-offset="6102">
+          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="1980">
           <caret line="42" column="71" selection-start-line="42" selection-start-column="71" selection-end-line="42" selection-end-column="71" />
           <folding />
@@ -670,7 +664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9396">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -751,7 +744,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.481482" vertical-offset="2363" max-vertical-offset="3510">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2363" max-vertical-offset="3510">
           <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
           <folding />
         </state>
@@ -772,26 +765,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="2250">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.26123127" vertical-offset="5693" max-vertical-offset="9396">
           <caret line="325" column="0" selection-start-line="325" selection-start-column="0" selection-end-line="325" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.03257329" vertical-offset="592" max-vertical-offset="2142">
+        <state vertical-scroll-proportion="-0.7407407" vertical-offset="592" max-vertical-offset="2142">
           <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.4397394" vertical-offset="540" max-vertical-offset="2250">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
         </state>
       </provider>
