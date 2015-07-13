@@ -256,15 +256,28 @@
             <div class="description">
               <h3>Issued Loans Statistics</h3>
             </div>
-            <a href="physical-entities/loan-statistics">
+            <a href="statistics-page">
               <i class="fa fa-line-chart fa-5x" ></i>
             </a>
           </div>
         </div>
 
+          <div class="col-lg-3">
+              <div class="content-box exchange-rates">
+                  <div class="description">
+                      <h3>Exchange Rate History</h3>
+                  </div>
+                  <a href="exchange-rates-history">
+                      <i class="fa fa-exchange fa-5x" ></i>
+                  </a>
+              </div>
+          </div>
+
       </div>
 
       <!--PHYSICAL ENTITIES END-->
+
+
 
   </div>
 

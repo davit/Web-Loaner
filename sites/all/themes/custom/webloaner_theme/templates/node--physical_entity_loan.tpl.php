@@ -31,7 +31,7 @@
     <table class="table table-responsive">
         <thead>
         <tr>
-            <th>#</th>
+            <th>Repayment Date</th>
             <th>Total Payment</th>
             <th>Interest</th>
             <th>Principal</th>

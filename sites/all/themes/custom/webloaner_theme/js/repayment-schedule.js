@@ -5,6 +5,14 @@ jQuery(document).ready(function ($) {
     var interestRate = $('.field-name-field-annual-interest-rate .field-item');
     var monthRows = $('.field-name-field-number-of-periods .field-item');
     var gracePeriod = $('.field-name-field-grace-period .field-item');
+    var issueDate = $('.field-name-field-issue-date .field-item').find('span').attr('content');
+
+    issueDate = new Date(issueDate);
+    issueDate.setDate(issueDate.getDate() + 1);
+    issueDate.setMonth(issueDate.getMonth() + 1);
+
+    var issueDateFormatted = issueDate.toJSON().slice(0,10);
+
 
     var tbody = loanTable.find('tbody');
     var tfoot = loanTable.find('tfoot');
@@ -16,7 +24,6 @@ jQuery(document).ready(function ($) {
         }
 
         var interest = parseFloat(interestRate.text() * 0.01 / 12 * loanAmount.text()).toFixed(2); // Per month
-
 
         var totalPayment = pmt($, interestRate.text(), monthRows.text(), loanAmount.text());
         var principal = parseFloat(totalPayment - interest).toFixed(2);
@@ -50,11 +57,12 @@ jQuery(document).ready(function ($) {
                 interestSum += parseFloat(interest);
                 principalSum += parseFloat(principal);
 
-                tbody.append('<tr><td>' + rc + '</td><td>'
+                tbody.append('<tr><td>' + issueDateFormatted + '</td><td>'
                 + totalPayment + '</td><td>'
                 + interest + '</td><td>'
                 + principal + '</td><td>'
                 + parseFloat(balance).toFixed(2) + '</td></tr>');
+
 
                 interest = parseFloat(interestRate.text() * 0.01 / 12 * balance).toFixed(2);
 
@@ -70,6 +78,8 @@ jQuery(document).ready(function ($) {
                     balance = parseFloat(balance - principal);
                 }
 
+                issueDate.setMonth(issueDate.getMonth() + 1);
+                issueDateFormatted = issueDate.toJSON().slice(0,10);
             }
 
             tfoot.append('<tr><th class="loan-total"></th><th>' +
@@ -78,6 +88,7 @@ jQuery(document).ready(function ($) {
             Math.round(principalSum).toFixed(2) +
             '</th><th></th></tr>');
             $('.loan-total').html('Total');
+
 
         }
     }
