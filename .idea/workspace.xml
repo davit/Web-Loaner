@@ -2,25 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca99f963-ad20-46d6-9bf1-885a29eda1e5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/TODO" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/modules/custom/exchange_rate/exchange_rate.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.info" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/node--physical_entity_loan.tpl.php" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/node--physical_entity_loan.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/page--front.tpl.php" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/page--front.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/public_html.iml" afterPath="$PROJECT_DIR$/.idea/public_html.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/js/repayment-schedule.js" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/js/repayment-schedule.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/css/style.css" afterPath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webloaner.sql" afterPath="$PROJECT_DIR$/webloaner.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="public_html.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,8 +40,8 @@
       <file leaf-file-name="loan_history.module" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.276551" vertical-offset="187" max-vertical-offset="6102">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.37329128" vertical-offset="77" max-vertical-offset="6102">
+              <caret line="24" column="66" selection-start-line="24" selection-start-column="66" selection-end-line="24" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -68,8 +50,8 @@
       <file leaf-file-name="loan_statistics.module" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.185185" vertical-offset="923" max-vertical-offset="1998">
-              <caret line="42" column="40" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
+            <state vertical-scroll-proportion="-15.814815" vertical-offset="923" max-vertical-offset="1998">
+              <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -582,14 +564,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.185185" vertical-offset="923" max-vertical-offset="1998">
-          <caret line="42" column="40" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_loan_history/physical_entity_loan_history.module">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43533123" vertical-offset="0" max-vertical-offset="1116">
@@ -606,10 +580,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_statistics/loan_statistics.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.814815" vertical-offset="923" max-vertical-offset="1998">
+          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/custom/physical_entity/loan_history/loan_history.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.276551" vertical-offset="187" max-vertical-offset="6102">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.37329128" vertical-offset="77" max-vertical-offset="6102">
+          <caret line="24" column="66" selection-start-line="24" selection-start-column="66" selection-end-line="24" selection-end-column="66" />
           <folding />
         </state>
       </provider>

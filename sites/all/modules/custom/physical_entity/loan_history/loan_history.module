@@ -21,8 +21,8 @@ function loan_history_update() {
 
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'loan_history')
-        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
-//        ->fieldCondition('field_repayment_date', 'value', '2015-11-12', '=');
+//        ->fieldCondition('field_repayment_date', 'value', date('Y-m-d', strtotime('Yesterday')), '=');
+        ->fieldCondition('field_repayment_date', 'value', '2015-10-12', '=');
 
     $result = $query->execute();
 
@@ -58,9 +58,9 @@ function loan_history_update() {
 
         $node = node_load($history->nid);
 
-        if ($cur_bal != 0) {
+//        if ($cur_bal != 0) {
             $balance_node = node_load($current_balance->nid);
-        }
+//        }
 
         if ($cur_bal >= $history->field_total_amount['und'][0]['value']) {
 
@@ -101,7 +101,7 @@ function loan_history_update() {
 
         }
 
-        if (!empty($node->field_actual_total_amount)) {
+//        if (!empty($node->field_actual_total_amount)) {
             $node->field_overdue_accrued['und'][0]['value'] =
                 $node->field_total_amount['und'][0]['value'] -
                 $node->field_actual_total_amount['und'][0]['value'];
@@ -112,7 +112,7 @@ function loan_history_update() {
 
             field_attach_update('node', $node);
             field_attach_update('node', $balance_node);
-        }
+//        }
 
 
     }
