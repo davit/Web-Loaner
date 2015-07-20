@@ -7,7 +7,9 @@ jQuery(document).ready(function($) {
         $personalIdNumbers.find('option').each(function() {
             if ($(this).text().match("^"+$pattern) && $pattern.length !== 0) {
                 $(this).attr('selected', true);
-                $('#edit-physical-entity').find('option[value="'+$(this).val()+'"]').attr('selected', true);
+                var $physicalEntity = $('#edit-physical-entity');
+                $physicalEntity.find('option[value="'+$(this).val()+'"]').attr('selected', true);
+                $physicalEntity.trigger('change');
             }else if ($pattern.length === 0){
                 $personalIdNumbers.find('option:first').attr('selected', true);
                 $('#edit-physical-entity').find('option:first').attr('selected', true);
@@ -19,14 +21,15 @@ jQuery(document).ready(function($) {
         var $physicalEntity = $('#edit-physical-entity');
 
         $physicalEntity.find('option[value="'+$(this).val()+'"]').attr('selected', true);
+        $physicalEntity.trigger('change');
     });
 
     $('#edit-annual-interest-rate').on('change', function () {
-       if ($(this).val() == 'Other') {
-           $('.form-item-interest-rate-other').show();
-       }else {
-           $('.form-item-interest-rate-other').hide();
-       }
+        if ($(this).val() == 'Other') {
+            $('.form-item-interest-rate-other').show();
+        }else {
+            $('.form-item-interest-rate-other').hide();
+        }
     });
 
 

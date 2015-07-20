@@ -11,6 +11,13 @@ function physical_entity_current_deposit_menu()
         'access callback' => TRUE,
     );
 
+    $items['add-deposit/history/%/%'] = array(
+        'title' => 'Loan History Views',
+        'page arguments' => array(2, 3),
+        'page callback' => 'physical_entity_current_deposit_views_ajax',
+        'access callback' => TRUE,
+    );
+
     return $items;
 }
 
@@ -21,10 +28,15 @@ function physical_entity_current_deposit_menu()
  */
 function physical_entity_current_deposit_page()
 {
-//    $loan_statement = physical_entity_form_statement_get_statement_form_by_nid(48);
-//    print $loan_statement->field_issue_date['und'][0]['value'];
-//    exit;
     return drupal_get_form('physical_entity_current_deposit_form');
+}
+
+function physical_entity_current_deposit_views_ajax($physical_entity_nid, $repayment_date = null) {
+    if ($repayment_date == null) {
+        $repayment_date = date('Y-m-d');
+    }
+
+    print views_embed_view('loan_history', 'default', $physical_entity_nid, $repayment_date);
 }
 
 /**
@@ -47,8 +59,6 @@ function physical_entity_current_deposit_form($form, &$form_state)
         $personal_id_numbers[$physical_entity_obj->nid] = $physical_entity_obj->field_personal_id_number['und'][0]['value'];
     }
 
-    $form['#prefix'] = '<div class="col-lg-4">';
-    $form['#suffix'] = '</div>';
 
     $form['personal_id_number_input'] = array(
         '#type' => 'textfield',
@@ -187,4 +197,23 @@ function get_physical_entities_with_issued_loans() {
 
 
     return $physical_entities;
+}
+
+
+/**
+ * Implements hook_theme().
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ */
+function physical_entity_current_deposit_theme($existing, $type, $theme, $path)
+{
+    $items['physical_entity_current_deposit_form'] = array(
+        'render element' => 'form',
+        'template' => 'templates/deposit-edit',
+//        'path' => drupal_get_path('theme', 'mytheme') . '/template/form',
+    );
+
+    return $items;
 }

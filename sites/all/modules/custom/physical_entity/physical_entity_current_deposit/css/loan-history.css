@@ -1,0 +1,9 @@
+.sufficient-amount {
+    background: rgb(113, 231, 113);
+    color: white;
+}
+
+.insufficient-amount {
+    background: rgb(200, 83, 83);
+    color: white;
+}

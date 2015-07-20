@@ -3,3 +3,7 @@ description = A module for adding deposits
 package = Physical Entity
 core = 7.x
 
+
+stylesheets[all][] = css/loan-history.css
+
+scripts[] = js/loan-history.js

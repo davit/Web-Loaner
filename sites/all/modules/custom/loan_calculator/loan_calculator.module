@@ -5,13 +5,31 @@
  * Implements hook_menu().
  */
 function loan_calculator_menu() {
-  $items['loan-calculator'] = array(
-    'title' => 'Loan Calculator',
-    'page callback' => 'loan_calculator_page',
-    'access arguments' => array('access content'),
-  );
+    $items['loan-calculator'] = array(
+        'title' => 'Loan Calculator',
+        'page callback' => 'loan_calculator_page',
+        'access arguments' => array('access content'),
+    );
 
-  return $items;
+    $items['admin/config/loan-calculator'] = array(
+        'title' => 'Loan Calculator',
+        'description' => 'description',
+        'position' => 'left',
+        'weight' => -25,
+        'page callback' => 'system_admin_menu_block_page',
+        'access arguments' => array('access administration pages'),
+    );
+
+    $items['admin/config/loan-calculator/parameters'] = array(
+        'title' => 'Loan Calculator Parameters',
+        'description' => 'Allows you to change calculator default parameters',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('loan_calculator_form'),
+        'access arguments' => array('administer authentication'),
+        'weight' => 10,
+    );
+
+    return $items;
 }
 
 /**
@@ -25,9 +43,27 @@ function loan_calculator_page() {
  * Implements hook_theme().
  */
 function loan_calculator_theme($existing, $type, $theme, $path) {
-  return array(
-      'loan_calculator_template' => array(
-          'template' => 'templates/loan_calculator',
-      ),
-  );
+    return array(
+        'loan_calculator_template' => array(
+            'template' => 'templates/loan_calculator',
+        ),
+        'loan_calculator_settings' => array(
+            'template' => 'templates/loan_calculator_settings',
+        ),
+    );
 }
+
+
+function loan_calculator_form($form, &$form_state) {
+    $form['welcome_message'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Welcome message'),
+        '#rows' => 5,
+        '#required' => TRUE,
+    );
+
+    return $form;
+
+}
+
+
