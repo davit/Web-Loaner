@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca99f963-ad20-46d6-9bf1-885a29eda1e5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sites/all/themes/custom/webloaner_theme/templates/field--field_accrued_interest--physical_entity_loan.tpl.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/loan_calculator.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/loan_calculator/loan_calculator.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.info" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_current_deposit/physical_entity_current_deposit.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/physical_entity_form_statement.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/js/physical_entity_fs.js" afterPath="$PROJECT_DIR$/sites/all/modules/custom/physical_entity/physical_entity_form_statement/js/physical_entity_fs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webloaner.sql" afterPath="$PROJECT_DIR$/webloaner.sql" />
     </list>
     <ignored path="public_html.iws" />
     <ignored path=".idea/workspace.xml" />
