@@ -38,6 +38,14 @@
                 }
                 principal.addClass('insufficient-amount');
             }
+
+            if ($(this).val().length == 0) {
+                accruedInterest.removeClass('insufficient-amount');
+                accruedInterest.removeClass('sufficient-amount');
+                principal.removeClass('insufficient-amount');
+                principal.removeClass('sufficient-amount');
+            }
+
         });
 
     });

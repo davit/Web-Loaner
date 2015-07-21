@@ -103,8 +103,8 @@ function loan_history_update() {
 
 //        if (!empty($node->field_actual_total_amount)) {
             $node->field_overdue_accrued['und'][0]['value'] =
-                $node->field_total_amount['und'][0]['value'] -
-                $node->field_actual_total_amount['und'][0]['value'];
+                ($node->field_total_amount['und'][0]['value'] - $node->field_actual_total_amount['und'][0]['value']) +
+                $node->field_total_amount['und'][0]['value'] * 0.05 / 100;
 
             if ($node->field_overdue_accrued['und'][0]['value'] > 0) {
                 $node->field_overdue_days['und'][0]['value'] = 1;
