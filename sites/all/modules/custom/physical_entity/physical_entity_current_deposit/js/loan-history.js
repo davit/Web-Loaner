@@ -14,36 +14,64 @@
             var totalAmount = $('.views-field-field-total-amount').filter('td');
             var accruedInterest = $('.views-field-field-interest-accrued').filter('td');
             var principal = $('.views-field-field-principal').filter('td');
+            var overdueAccrued = $('.views-field-field-overdue-accrued').filter('td');
+            var tempBalance = $(this).val();
 
-            if ($(this).val() >= parseInt(accruedInterest.text())) {
-                if (accruedInterest.hasClass('insufficient-amount')) {
-                    accruedInterest.removeClass('insufficient-amount');
+            if ($(this).val() >= parseFloat(overdueAccrued.text())) {
+                if (overdueAccrued.hasClass('insufficient-amount')) {
+                    overdueAccrued.removeClass('insufficient-amount');
                 }
-                accruedInterest.addClass('sufficient-amount');
+                tempBalance -= parseFloat(overdueAccrued.text());
+                tempBalance = tempBalance.toFixed(2);
+                overdueAccrued.addClass('sufficient-amount');
             }else {
-                if (accruedInterest.hasClass('sufficient-amount')) {
-                    accruedInterest.removeClass('sufficient-amount');
-                }
-                accruedInterest.addClass('insufficient-amount');
+                overdueAccrued.addClass('insufficient-amount');
             }
 
-            if ($(this).val() - parseInt(accruedInterest.text()) >= parseInt(principal.text())) {
-                if (principal.hasClass('insufficient-amount')) {
-                    principal.removeClass('insufficient-amount');
+            if (overdueAccrued.hasClass('sufficient-amount')) {
+                if (tempBalance > 0 && tempBalance >= parseFloat(accruedInterest.text())) {
+                    if (accruedInterest.hasClass('insufficient-amount')) {
+                        accruedInterest.removeClass('insufficient-amount');
+                    }
+                    tempBalance -= parseFloat(accruedInterest.text());
+                    accruedInterest.addClass('sufficient-amount');
+                }else {
+                    accruedInterest.addClass('insufficient-amount');
                 }
-                principal.addClass('sufficient-amount');
-            }else {
-                if (principal.hasClass('sufficient-amount')) {
-                    principal.removeClass('sufficient-amount');
-                }
-                principal.addClass('insufficient-amount');
             }
+
+            if (accruedInterest.hasClass('sufficient-amount')) {
+                if (tempBalance > 0 && tempBalance >= parseFloat(principal.text())) {
+                    if (principal.hasClass('insufficient-amount')) {
+                        principal.removeClass('insufficient-amount');
+                    }
+                    tempBalance -= parseFloat(principal.text());
+                    principal.addClass('sufficient-amount');
+                }else {
+                    principal.addClass('insufficient-amount');
+                }
+            }
+
+
+            //if ($(this).val() - parseInt(accruedInterest.text()) >= parseInt(principal.text())) {
+            //    if (principal.hasClass('insufficient-amount')) {
+            //        principal.removeClass('insufficient-amount');
+            //    }
+            //    principal.addClass('sufficient-amount');
+            //}else {
+            //    if (principal.hasClass('sufficient-amount')) {
+            //        principal.removeClass('sufficient-amount');
+            //    }
+            //    principal.addClass('insufficient-amount');
+            //}
 
             if ($(this).val().length == 0) {
                 accruedInterest.removeClass('insufficient-amount');
                 accruedInterest.removeClass('sufficient-amount');
                 principal.removeClass('insufficient-amount');
                 principal.removeClass('sufficient-amount');
+                overdueAccrued.removeClass('insufficient-amount');
+                overdueAccrued.removeClass('sufficient-amount');
             }
 
         });

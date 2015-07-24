@@ -154,9 +154,9 @@ function physical_entity_current_deposit_form_submit($form, &$form_state)
         0 => array('value' => $form_state['values']['date'])
     );
 
+
     $node = node_submit($node);
     node_save($node);
-
 
     loan_history_calculate_current_balance($physical_entity_nid);
 

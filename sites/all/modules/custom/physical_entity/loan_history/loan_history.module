@@ -283,6 +283,11 @@ function loan_history_repayments_schedule($loan_id, $issue_date) {
     }
 }
 
+function loan_history_views_pre_render(&$view) {
+
+  
+}
+
 
 function loan_history_update_loan_history($amount_sum) {
 
